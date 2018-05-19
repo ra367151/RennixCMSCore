@@ -23,12 +23,6 @@ namespace RennixCMS.Infrastructure.Data.Repository
 		TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
 		Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
-		/// <summary>
-		/// 此方法不会从数据库中检索实体,但它会创建延迟执行所需的代理对象。如果你只使用Id属性,实际上并不会检索实体,它只有在你存取想要查询实体的某个属性时才会从数据库中查询实体。当有性能需求的时候,这个方法可以用来替代Get方法。
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		TEntity Load(TPrimaryKey id);
 		#endregion
 
 
@@ -45,10 +39,6 @@ namespace RennixCMS.Infrastructure.Data.Repository
 		Task<TEntity> InsertAsync(TEntity entity);
 		TPrimaryKey InsertAndGetId(TEntity entity);
 		Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity);
-		TEntity InsertOrUpdate(TEntity entity);
-		Task<TEntity> InsertOrUpdateAsync(TEntity entity);
-		TPrimaryKey InsertOrUpdateAndGetId(TEntity entity);
-		Task<TPrimaryKey> InsertOrUpdateAndGetIdAsync(TEntity entity);
 		#endregion
 
 		#region 更新实体
@@ -70,9 +60,7 @@ namespace RennixCMS.Infrastructure.Data.Repository
 		Task<int> CountAsync();
 		int Count(Expression<Func<TEntity, bool>> predicate);
 		Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
-		long LongCount();
 		Task<long> LongCountAsync();
-		long LongCount(Expression<Func<TEntity, bool>> predicate);
 		Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate);
 		#endregion
 	}

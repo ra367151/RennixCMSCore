@@ -30,12 +30,12 @@ namespace RennixCMS.EntityFramework.Repositories
 
 
 		#region 仓储实现
-		public IQueryable<TEntity> GetAll()
+		public virtual IQueryable<TEntity> GetAll()
 		{
 			return GetAllIncluding();
 		}
 
-		public IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
+		public virtual IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
 		{
 			var query = Table.AsQueryable();
 
@@ -50,42 +50,42 @@ namespace RennixCMS.EntityFramework.Repositories
 			return query;
 		}
 
-		public async Task<List<TEntity>> GetAllListAsync()
+		public virtual async Task<List<TEntity>> GetAllListAsync()
 		{
 			return await GetAll().ToListAsync();
 		}
 
-		public async Task<List<TEntity>> GetAllListAsync(Expression<Func<TEntity, bool>> predicate)
+		public virtual async Task<List<TEntity>> GetAllListAsync(Expression<Func<TEntity, bool>> predicate)
 		{
 			return await GetAll().Where(predicate).ToListAsync();
 		}
 
-		public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> predicate)
+		public virtual async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> predicate)
 		{
 			return await GetAll().SingleAsync(predicate);
 		}
 
-		public async Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
+		public virtual async Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
 		{
 			return await GetAll().FirstOrDefaultAsync(x => x.Id.Equals(id));
 		}
 
-		public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+		public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
 		{
 			return await GetAll().FirstOrDefaultAsync(predicate);
 		}
 
-		public TEntity Insert(TEntity entity)
+		public virtual TEntity Insert(TEntity entity)
 		{
 			return Table.Add(entity).Entity;
 		}
 
-		public Task<TEntity> InsertAsync(TEntity entity)
+		public virtual async Task<TEntity> InsertAsync(TEntity entity)
 		{
-			return Task.FromResult(Insert(entity));
+			return await Task.FromResult(Insert(entity));
 		}
 
-		public TPrimaryKey InsertAndGetId(TEntity entity)
+		public virtual TPrimaryKey InsertAndGetId(TEntity entity)
 		{
 			entity = Insert(entity);
 
@@ -97,7 +97,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			return entity.Id;
 		}
 
-		public async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
+		public virtual async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
 		{
 			entity = await InsertAsync(entity);
 
@@ -109,60 +109,28 @@ namespace RennixCMS.EntityFramework.Repositories
 			return entity.Id;
 		}
 
-		public TPrimaryKey InsertOrUpdateAndGetId(TEntity entity)
-		{
-			entity = InsertOrUpdate(entity);
 
-			if (entity.IsTransient())
-			{
-				Context.SaveChanges();
-			}
 
-			return entity.Id;
-		}
-
-		private TEntity InsertOrUpdate(TEntity entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public async Task<TPrimaryKey> InsertOrUpdateAndGetIdAsync(TEntity entity)
-		{
-			entity = await InsertOrUpdateAsync(entity);
-
-			if (entity.IsTransient())
-			{
-				await Context.SaveChangesAsync();
-			}
-
-			return entity.Id;
-		}
-
-		private Task<TEntity> InsertOrUpdateAsync(TEntity entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public TEntity Update(TEntity entity)
+		public virtual TEntity Update(TEntity entity)
 		{
 			AttachIfNot(entity);
 			Context.Entry(entity).State = EntityState.Modified;
 			return entity;
 		}
 
-		public Task<TEntity> UpdateAsync(TEntity entity)
+		public virtual async Task<TEntity> UpdateAsync(TEntity entity)
 		{
 			entity = Update(entity);
-			return Task.FromResult(entity);
+			return await Task.FromResult(entity);
 		}
 
-		public void Delete(TEntity entity)
+		public virtual void Delete(TEntity entity)
 		{
 			AttachIfNot(entity);
 			Table.Remove(entity);
 		}
 
-		public void Delete(TPrimaryKey id)
+		public virtual void Delete(TPrimaryKey id)
 		{
 			var entity = GetFromChangeTrackerOrNull(id);
 			if (entity != null)
@@ -181,12 +149,12 @@ namespace RennixCMS.EntityFramework.Repositories
 			//Could not found the entity, do nothing.
 		}
 
-		private TEntity FirstOrDefault(TPrimaryKey id)
+		public virtual TEntity FirstOrDefault(TPrimaryKey id)
 		{
 			return GetAll().FirstOrDefault(x => x.Id.Equals(id));
 		}
 
-		public async Task<int> CountAsync()
+		public virtual async Task<int> CountAsync()
 		{
 			return await GetAll().CountAsync();
 		}
@@ -217,24 +185,6 @@ namespace RennixCMS.EntityFramework.Repositories
 			Table.Attach(entity);
 		}
 
-		public Task EnsureCollectionLoadedAsync<TProperty>(
-			TEntity entity,
-			Expression<Func<TEntity, IEnumerable<TProperty>>> collectionExpression,
-			CancellationToken cancellationToken)
-			where TProperty : class
-		{
-			return Context.Entry(entity).Collection(collectionExpression).LoadAsync(cancellationToken);
-		}
-
-		public Task EnsurePropertyLoadedAsync<TProperty>(
-			TEntity entity,
-			Expression<Func<TEntity, TProperty>> propertyExpression,
-			CancellationToken cancellationToken)
-			where TProperty : class
-		{
-			return Context.Entry(entity).Reference(propertyExpression).LoadAsync(cancellationToken);
-		}
-
 		private TEntity GetFromChangeTrackerOrNull(TPrimaryKey id)
 		{
 			var entry = Context.ChangeTracker.Entries()
@@ -247,95 +197,71 @@ namespace RennixCMS.EntityFramework.Repositories
 			return entry?.Entity as TEntity;
 		}
 
-		public TEntity Get(TPrimaryKey id)
+		public virtual TEntity Get(TPrimaryKey id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<TEntity> GetAsync(TPrimaryKey id)
+		public virtual async Task<TEntity> GetAsync(TPrimaryKey id)
 		{
-			throw new NotImplementedException();
+			return await Task.FromResult(Get(id));
 		}
 
-		public TEntity Single(Expression<Func<TEntity, bool>> predicate)
+		public virtual TEntity Single(Expression<Func<TEntity, bool>> predicate)
 		{
 			return GetAll().Single(predicate);
 		}
 
-		TEntity IRepository<TEntity, TPrimaryKey>.FirstOrDefault(TPrimaryKey id)
+		public virtual TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
 		{
-			throw new NotImplementedException();
+			return GetAll().FirstOrDefault(predicate);
 		}
 
-		public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+		public virtual List<TEntity> GetAllList()
 		{
-			throw new NotImplementedException();
+			return GetAll().ToList();
 		}
 
-		public TEntity Load(TPrimaryKey id)
+		public virtual List<TEntity> GetAllList(Expression<Func<TEntity, bool>> predicate)
 		{
-			throw new NotImplementedException();
+			return GetAll().Where(predicate).ToList();
 		}
 
-		public List<TEntity> GetAllList()
+		public virtual async Task DeleteAsync(TEntity entity)
 		{
-			throw new NotImplementedException();
+			await DeleteAsync(x => x.Id.Equals(entity.Id));
 		}
 
-		public List<TEntity> GetAllList(Expression<Func<TEntity, bool>> predicate)
+		public virtual async Task DeleteAsync(TPrimaryKey id)
 		{
-			throw new NotImplementedException();
+			await DeleteAsync(x => x.Id.Equals(id));
 		}
 
-		TEntity IRepository<TEntity, TPrimaryKey>.InsertOrUpdate(TEntity entity)
+		public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
 		{
-			throw new NotImplementedException();
+			foreach (var item in GetAll().Where(predicate))
+			{
+				Context.Set<TEntity>().Attach(item as TEntity);
+				Context.Entry(item).State = EntityState.Deleted;
+				Context.Set<TEntity>().Remove(item as TEntity);
+			}
 		}
 
-		Task<TEntity> IRepository<TEntity, TPrimaryKey>.InsertOrUpdateAsync(TEntity entity)
+		public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
 		{
-			throw new NotImplementedException();
+			await Task.Factory.StartNew(() => Delete(predicate));
 		}
 
-		public Task DeleteAsync(TEntity entity)
+		public virtual int Count()
 		{
-			throw new NotImplementedException();
+			return GetAll().Count();
 		}
 
-		public Task DeleteAsync(TPrimaryKey id)
+		public virtual int Count(Expression<Func<TEntity, bool>> predicate)
 		{
-			throw new NotImplementedException();
+			return GetAll().Where(predicate).Count();
 		}
 
-		public void Delete(Expression<Func<TEntity, bool>> predicate)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
-		{
-			throw new NotImplementedException();
-		}
-
-		public int Count()
-		{
-			throw new NotImplementedException();
-		}
-
-		public int Count(Expression<Func<TEntity, bool>> predicate)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long LongCount()
-		{
-			throw new NotImplementedException();
-		}
-
-		public long LongCount(Expression<Func<TEntity, bool>> predicate)
-		{
-			throw new NotImplementedException();
-		}
 		#endregion
 
 	}
