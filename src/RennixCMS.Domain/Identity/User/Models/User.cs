@@ -6,7 +6,7 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Identity.User.Models
 {
-	public class User : IdentityUser<Guid>, IEntity<Guid>
+	public class User : IdentityUser<int>, IEntity
 	{
 
 	}

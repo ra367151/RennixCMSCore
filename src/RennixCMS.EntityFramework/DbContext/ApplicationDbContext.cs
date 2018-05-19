@@ -16,7 +16,7 @@ namespace RennixCMS.EntityFramework.DbContext
 {
 	//TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : IdentityUserContext<TUser, TKey, TUserClaim, TUserLogin, TUserToken
 	public class ApplicationDbContext :
-		IdentityDbContext<User, Role, Guid,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
+		IdentityDbContext<User, Role, int,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			:base(options)

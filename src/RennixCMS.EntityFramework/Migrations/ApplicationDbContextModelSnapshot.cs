@@ -22,7 +22,7 @@ namespace RennixCMS.EntityFramework.Migrations
 
             modelBuilder.Entity("RennixCMS.Domain.Identity.Role.Models.Role", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
@@ -53,7 +53,7 @@ namespace RennixCMS.EntityFramework.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<Guid>("RoleId");
+                    b.Property<int>("RoleId");
 
                     b.HasKey("Id");
 
@@ -64,7 +64,7 @@ namespace RennixCMS.EntityFramework.Migrations
 
             modelBuilder.Entity("RennixCMS.Domain.Identity.User.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
@@ -122,7 +122,7 @@ namespace RennixCMS.EntityFramework.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -137,9 +137,11 @@ namespace RennixCMS.EntityFramework.Migrations
 
                     b.Property<string>("ProviderKey");
 
+                    b.Property<int>("Id");
+
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -150,9 +152,11 @@ namespace RennixCMS.EntityFramework.Migrations
 
             modelBuilder.Entity("RennixCMS.Domain.Identity.UserRole.Models.UserRole", b =>
                 {
-                    b.Property<Guid>("UserId");
+                    b.Property<int>("UserId");
 
-                    b.Property<Guid>("RoleId");
+                    b.Property<int>("RoleId");
+
+                    b.Property<int>("Id");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -163,11 +167,13 @@ namespace RennixCMS.EntityFramework.Migrations
 
             modelBuilder.Entity("RennixCMS.Domain.Identity.UserToken.Models.UserToken", b =>
                 {
-                    b.Property<Guid>("UserId");
+                    b.Property<int>("UserId");
 
                     b.Property<string>("LoginProvider");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("Id");
 
                     b.Property<string>("Value");
 

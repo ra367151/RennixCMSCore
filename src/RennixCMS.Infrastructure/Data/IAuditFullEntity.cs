@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-	public interface IAuditFullEntity<TKey> : IEntity<TKey>, ISoftDeleteEntity<TKey>
+	public interface IAuditFullEntity : IEntity, ISoftDeleteEntity
 	{
 		/// <summary>
 		/// 创建时间
@@ -14,7 +14,7 @@ namespace RennixCMS.Infrastructure.Data
 		/// <summary>
 		/// 创建的用户id
 		/// </summary>
-		Guid CreateUserId { get; set; }
+		int CreateUserId { get; set; }
 
 		/// <summary>
 		/// 最后修改的时间
@@ -24,7 +24,7 @@ namespace RennixCMS.Infrastructure.Data
 		/// <summary>
 		/// 最后修改的用户id
 		/// </summary>
-		Guid LastModifyUserId { get; set; }
+		int LastModifyUserId { get; set; }
 
 	}
 }

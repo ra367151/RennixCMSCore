@@ -6,8 +6,8 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Identity.RoleClaim.Models
 {
-	public class RoleClaim : IdentityRoleClaim<Guid>, IEntity<Guid>
+	public class RoleClaim : IdentityRoleClaim<int>, IEntity
 	{
-		 public Guid Id { get; set; }
+
 	}
 }

@@ -13,6 +13,8 @@ using RennixCMS.Web.Services;
 using RennixCMS.EntityFramework.DbContext;
 using RennixCMS.Domain.Identity.User.Models;
 using RennixCMS.Domain.Identity.Role.Models;
+using RennixCMS.Infrastructure.Data.Repository;
+using RennixCMS.EntityFramework.Repositories;
 
 namespace RennixCMS.Web
 {
@@ -37,6 +39,8 @@ namespace RennixCMS.Web
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+
+			services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddMvc();
         }

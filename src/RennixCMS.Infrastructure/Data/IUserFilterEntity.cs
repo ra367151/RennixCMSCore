@@ -4,11 +4,11 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-    public interface IUserFilterEntity<TKey>:IEntity<TKey>
+    public interface IUserFilterEntity:IEntity
     {
 		/// <summary>
 		/// 此记录所属的用户id
 		/// </summary>
-		 Guid UserId { get; set; }
+		 int UserId { get; set; }
     }
 }

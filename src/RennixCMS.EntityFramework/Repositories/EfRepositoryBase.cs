@@ -6,24 +6,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RennixCMS.EntityFramework.DbContext;
 using RennixCMS.Infrastructure.Data;
 using RennixCMS.Infrastructure.Data.Repository;
 using RennixCMS.Infrastructure.Extionsions;
 
 namespace RennixCMS.EntityFramework.Repositories
 {
-	public class EfRepositoryBase<TDbContext, TEntity, TPrimaryKey> :
-		IRepository<TEntity, TPrimaryKey>
-		where TEntity : class, IEntity<TPrimaryKey>
-		where TDbContext : Microsoft.EntityFrameworkCore.DbContext
+	public class EfRepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
 	{
-		public EfRepositoryBase(Func<TDbContext> dbContext)
+		public EfRepositoryBase(ApplicationDbContext dbContext)
 		{
-			Context = dbContext();
+			Context = dbContext;
 			Table = Context.Set<TEntity>();
 		}
 
-		public TDbContext Context { get; set; }
+		public Microsoft.EntityFrameworkCore.DbContext Context { get; set; }
 
 		public DbSet<TEntity> Table { get; set; }
 
@@ -65,7 +63,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			return await GetAll().SingleAsync(predicate);
 		}
 
-		public virtual async Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
+		public virtual async Task<TEntity> FirstOrDefaultAsync(int id)
 		{
 			return await GetAll().FirstOrDefaultAsync(x => x.Id.Equals(id));
 		}
@@ -85,7 +83,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			return await Task.FromResult(Insert(entity));
 		}
 
-		public virtual TPrimaryKey InsertAndGetId(TEntity entity)
+		public virtual object InsertAndGetId(TEntity entity)
 		{
 			entity = Insert(entity);
 
@@ -97,7 +95,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			return entity.Id;
 		}
 
-		public virtual async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
+		public virtual async Task<object> InsertAndGetIdAsync(TEntity entity)
 		{
 			entity = await InsertAsync(entity);
 
@@ -130,7 +128,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			Table.Remove(entity);
 		}
 
-		public virtual void Delete(TPrimaryKey id)
+		public virtual void Delete(int id)
 		{
 			var entity = GetFromChangeTrackerOrNull(id);
 			if (entity != null)
@@ -149,7 +147,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			//Could not found the entity, do nothing.
 		}
 
-		public virtual TEntity FirstOrDefault(TPrimaryKey id)
+		public virtual TEntity FirstOrDefault(int id)
 		{
 			return GetAll().FirstOrDefault(x => x.Id.Equals(id));
 		}
@@ -185,24 +183,24 @@ namespace RennixCMS.EntityFramework.Repositories
 			Table.Attach(entity);
 		}
 
-		private TEntity GetFromChangeTrackerOrNull(TPrimaryKey id)
+		private TEntity GetFromChangeTrackerOrNull(int id)
 		{
 			var entry = Context.ChangeTracker.Entries()
 				.FirstOrDefault(
 					ent =>
 						ent.Entity is TEntity &&
-						EqualityComparer<TPrimaryKey>.Default.Equals(id, (ent.Entity as TEntity).Id)
+						EqualityComparer<object>.Default.Equals(id, (ent.Entity as TEntity).Id)
 				);
 
 			return entry?.Entity as TEntity;
 		}
 
-		public virtual TEntity Get(TPrimaryKey id)
+		public virtual TEntity Get(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public virtual async Task<TEntity> GetAsync(TPrimaryKey id)
+		public virtual async Task<TEntity> GetAsync(int id)
 		{
 			return await Task.FromResult(Get(id));
 		}
@@ -232,7 +230,7 @@ namespace RennixCMS.EntityFramework.Repositories
 			await DeleteAsync(x => x.Id.Equals(entity.Id));
 		}
 
-		public virtual async Task DeleteAsync(TPrimaryKey id)
+		public virtual async Task DeleteAsync(int id)
 		{
 			await DeleteAsync(x => x.Id.Equals(id));
 		}

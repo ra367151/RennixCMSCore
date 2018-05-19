@@ -4,12 +4,25 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RennixCMS.Domain.Identity.RoleClaim.Models;
+using RennixCMS.Domain.Identity.User.Models;
+using RennixCMS.Infrastructure.Data.Repository;
 using RennixCMS.Web.Models;
 
 namespace RennixCMS.Web.Controllers
 {
     public class HomeController : Controller
     {
+		private readonly IRepository<User> _repository;
+
+		public HomeController(IRepository<User> repository,IRepository<RoleClaim> repository2)
+		{
+			_repository = repository;
+
+			var a = _repository.FirstOrDefault(x=>true);
+			var b = _repository.GetAllList();
+		}
+
         public IActionResult Index()
         {
             return View();

@@ -4,8 +4,8 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-	public class Entity<TKey> : IEntity<TKey>
+	public class Entity : IEntity
 	{
-		public TKey Id { get; set; }
+		public int Id { get; set; }
 	}
 }

@@ -8,7 +8,7 @@ namespace RennixCMS.Infrastructure.Extionsions
 {
     public static class IEntityExtension
     {
-		public static bool IsTransient<TKey>(this IEntity<TKey> source)
+		public static bool IsTransient(this IEntity source)
 		{
 			var props = source.GetType().GetProperties();
 			return props.Any(x => x.Name.Equals("Id", StringComparison.CurrentCultureIgnoreCase));

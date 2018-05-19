@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RennixCMS.Application\RennixCMS.Application.csproj" />
+    <ProjectReference Include="..\RennixCMS.EntityFramework\RennixCMS.EntityFramework.csproj" />
     <ProjectReference Include="..\RennixCMS.Infrastructure\RennixCMS.Infrastructure.csproj" />
     <ProjectReference Include="..\RennixCMS.WebApi\RennixCMS.WebApi.csproj" />
   </ItemGroup>

@@ -4,9 +4,9 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-	public class SoftDeleteEntity<TKey> : ISoftDeleteEntity<TKey>
+	public class SoftDeleteEntity : ISoftDeleteEntity
 	{
 		public bool IsDelete { get; set; }
-		public TKey Id { get; set; }
+		public int Id { get; set; }
 	}
 }

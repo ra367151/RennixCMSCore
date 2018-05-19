@@ -4,8 +4,11 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-	public interface IEntity<TKey>
+	/// <summary>
+	/// 实体类型约束
+	/// </summary>
+	public interface IEntity
 	{
-		TKey Id { get; set; }
+		int Id { get; set; }
 	}
 }

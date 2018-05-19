@@ -7,7 +7,7 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Identity.Role.Models
 {
-    public class Role:IdentityRole<Guid>, IEntity<Guid>
+    public class Role:IdentityRole<int>, IEntity
 	{
 		
     }
