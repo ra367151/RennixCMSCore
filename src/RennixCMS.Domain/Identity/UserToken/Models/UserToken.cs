@@ -6,8 +6,8 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Identity.UserToken.Models
 {
-    public class UserToken : IdentityUserToken<Guid>, IEntity
+	public class UserToken : IdentityUserToken<Guid>, IEntity<Guid>
 	{
-		
-    }
+		public Guid Id { get; set; }
+	}
 }

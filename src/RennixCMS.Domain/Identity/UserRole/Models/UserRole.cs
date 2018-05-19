@@ -6,8 +6,8 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Identity.UserRole.Models
 {
-    public class UserRole: IdentityUserRole<Guid>, IEntity
+	public class UserRole : IdentityUserRole<Guid>, IEntity<Guid>
 	{
-		
-    }
+		public Guid Id { get; set; }
+	}
 }

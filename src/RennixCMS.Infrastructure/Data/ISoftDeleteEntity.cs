@@ -4,8 +4,8 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-    public interface ISoftDeleteEntity:IEntity
-    {
+    public interface ISoftDeleteEntity<TKey> : IEntity<TKey>
+	{
 		/// <summary>
 		/// 是否被删除
 		/// </summary>

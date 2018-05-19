@@ -4,8 +4,8 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.EntityFramework.Configuration
 {
-	public abstract class ModelConfiguration<T> : IEntityTypeConfiguration<T> where T : class,IEntity
+	public abstract class ModelConfiguration<TEntity,TKey> : IEntityTypeConfiguration<TEntity> where TEntity : class,IEntity<TKey>
 	{
-		public abstract void Configure(EntityTypeBuilder<T> builder);
+		public abstract void Configure(EntityTypeBuilder<TEntity> builder);
 	}
 }

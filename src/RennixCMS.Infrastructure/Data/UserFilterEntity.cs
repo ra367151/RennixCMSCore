@@ -4,8 +4,9 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-	public class UserFilterEntity : IUserFilterEntity
+	public class UserFilterEntity<TKey> : IUserFilterEntity<TKey>
 	{
 		public Guid UserId { get; set; }
+		public TKey Id { get; set; }
 	}
 }

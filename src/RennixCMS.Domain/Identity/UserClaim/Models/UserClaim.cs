@@ -6,8 +6,8 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Identity.UserClaim.Models
 {
-    public class UserClaim : IdentityUserClaim<Guid>, IEntity
+	public class UserClaim : IdentityUserClaim<Guid>, IEntity<Guid>
 	{
-		
-    }
+		public Guid Id { get; set; }
+	}
 }

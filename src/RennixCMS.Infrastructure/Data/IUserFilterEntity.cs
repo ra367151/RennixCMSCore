@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-    public interface IUserFilterEntity:IEntity
+    public interface IUserFilterEntity<TKey>:IEntity<TKey>
     {
 		/// <summary>
 		/// 此记录所属的用户id

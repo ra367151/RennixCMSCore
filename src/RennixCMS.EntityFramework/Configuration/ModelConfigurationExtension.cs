@@ -28,7 +28,7 @@ namespace RennixCMS.EntityFramework.Configuration
 								&& !x.IsAbstract
 								&& !x.IsInterface
 								&& x.BaseType.IsGenericType
-								&& x.BaseType.GetGenericTypeDefinition() == typeof(ModelConfiguration<>))
+								&& x.BaseType.GetGenericTypeDefinition() == typeof(ModelConfiguration<,>))
 								.ToList();
 
 			foreach (var type in configurationTypes)
