@@ -1,5 +1,6 @@
 ﻿@using RennixCMS.Web.Views.Manage
-@inject SignInManager<ApplicationUser> SignInManager
+@using RennixCMS.Domain.Identity.User.Models
+@inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

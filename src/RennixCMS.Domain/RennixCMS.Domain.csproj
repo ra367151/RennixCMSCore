@@ -4,4 +4,24 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Identity\UserToken\Dtos\" />
+    <Folder Include="Identity\RoleClaim\Dtos\" />
+    <Folder Include="Identity\UserRole\Dtos\" />
+    <Folder Include="Identity\User\Dtos\" />
+    <Folder Include="Identity\UserClaim\Dtos\" />
+    <Folder Include="Identity\Role\Dtos\" />
+    <Folder Include="Identity\UserLogin\Dtos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RennixCMS.Infrastructure\RennixCMS.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Identity.Stores">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.identity.stores\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Identity.Stores.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RennixCMS.Web.Data;
 using RennixCMS.Web.Models;
 using RennixCMS.Web.Services;
+using RennixCMS.EntityFramework.DbContext;
+using RennixCMS.Domain.Identity.User.Models;
+using RennixCMS.Domain.Identity.Role.Models;
 
 namespace RennixCMS.Web
 {
@@ -27,11 +29,11 @@ namespace RennixCMS.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("RennixCMS")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+			services.AddIdentity<User, Role>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
