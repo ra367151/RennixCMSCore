@@ -11,7 +11,6 @@ namespace RennixCMS.Infrastructure.Data.Repository
 	/// 仓储规范
 	/// </summary>
 	/// <typeparam name="TEntity">实现或者间接实现IEntity的实体类型</typeparam>
-	/// <typeparam name="object">需要操作的实体类的主键类型</typeparam>
 	public interface IRepository<TEntity> where TEntity : class, IEntity
 	{
 		#region 取得单一实体
@@ -20,6 +19,8 @@ namespace RennixCMS.Infrastructure.Data.Repository
 		TEntity Single(Expression<Func<TEntity, bool>> predicate);
 		TEntity FirstOrDefault(int id);
 		Task<TEntity> FirstOrDefaultAsync(int id);
+		TEntity FirstOrDefault();
+		Task<TEntity> FirstOrDefaultAsync();
 		TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
 		Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
@@ -35,24 +36,22 @@ namespace RennixCMS.Infrastructure.Data.Repository
 		#endregion
 
 		#region 插入实体
-		TEntity Insert(TEntity entity);
-		Task<TEntity> InsertAsync(TEntity entity);
-		object InsertAndGetId(TEntity entity);
-		Task<object> InsertAndGetIdAsync(TEntity entity);
+		TEntity Insert(TEntity entity, bool isSave = true);
+		Task<TEntity> InsertAsync(TEntity entity, bool isSave = true);
 		#endregion
 
 		#region 更新实体
-		TEntity Update(TEntity entity);
-		Task<TEntity> UpdateAsync(TEntity entity);
+		TEntity Update(TEntity entity, bool isSave = true);
+		Task<TEntity> UpdateAsync(TEntity entity, bool isSave = true);
 		#endregion
 
 		#region 删除实体
-		void Delete(TEntity entity);
-		Task DeleteAsync(TEntity entity);
-		void Delete(int id);
-		Task DeleteAsync(int id);
-		void Delete(Expression<Func<TEntity, bool>> predicate);
-		Task DeleteAsync(Expression<Func<TEntity, bool>> predicate);
+		void Delete(TEntity entity, bool isSave = true);
+		Task DeleteAsync(TEntity entity, bool isSave = true);
+		void Delete(int id, bool isSave = true);
+		Task DeleteAsync(int id, bool isSave = true);
+		void Delete(Expression<Func<TEntity, bool>> predicate, bool isSave = true);
+		Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool isSave = true);
 		#endregion
 
 		#region 其他方法
