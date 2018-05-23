@@ -10,26 +10,18 @@ using RennixCMS.Domain.Identity.UserClaim.Models;
 using RennixCMS.Domain.Identity.UserLogin.Models;
 using RennixCMS.Domain.Identity.UserRole.Models;
 using RennixCMS.Domain.Identity.UserToken.Models;
-using RennixCMS.EntityFramework.Configuration;
 
 namespace RennixCMS.EntityFramework.DbContext
 {
-	//TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : IdentityUserContext<TUser, TKey, TUserClaim, TUserLogin, TUserToken
-	public class ApplicationDbContext : ApplicationDbContextBase
+	/// <summary>
+	/// 应用程序数据库上下文
+	/// </summary>
+	public abstract class ApplicationDbContextBase :
+		IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
 	{
-		public ApplicationDbContext(DbContextOptions options)
-			:base(options)
+		public ApplicationDbContextBase(DbContextOptions options) : base(options)
 		{
-			
-		}
 
-		protected override void OnModelCreating(ModelBuilder builder)
-		{
-			base.OnModelCreating(builder);
-
-			builder.LoadAllFromFluentApi();
-
-			builder.RemoveAspNetPrefixForIdentity();
 		}
 	}
 }

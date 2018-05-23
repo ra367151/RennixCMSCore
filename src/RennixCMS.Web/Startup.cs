@@ -30,11 +30,13 @@ namespace RennixCMS.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+			services.AddScoped(typeof(ApplicationDbContextBase), typeof(ApplicationDbContext));
+
+			services.AddDbContext<ApplicationDbContextBase>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RennixCMS")));
 
 			services.AddIdentity<User, Role>()
-				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddEntityFrameworkStores<ApplicationDbContextBase>()
 				.AddDefaultTokenProviders();
 
             // Add application services.

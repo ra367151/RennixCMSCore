@@ -36,22 +36,22 @@ namespace RennixCMS.Infrastructure.Data.Repository
 		#endregion
 
 		#region 插入实体
-		TEntity Insert(TEntity entity, bool isSave = true);
-		Task<TEntity> InsertAsync(TEntity entity, bool isSave = true);
+		TEntity Insert(TEntity entity);
+		Task<TEntity> InsertAsync(TEntity entity);
 		#endregion
 
 		#region 更新实体
-		TEntity Update(TEntity entity, bool isSave = true);
-		Task<TEntity> UpdateAsync(TEntity entity, bool isSave = true);
+		TEntity Update(TEntity entity);
+		Task<TEntity> UpdateAsync(TEntity entity );
 		#endregion
 
 		#region 删除实体
-		void Delete(TEntity entity, bool isSave = true);
-		Task DeleteAsync(TEntity entity, bool isSave = true);
-		void Delete(int id, bool isSave = true);
-		Task DeleteAsync(int id, bool isSave = true);
-		void Delete(Expression<Func<TEntity, bool>> predicate, bool isSave = true);
-		Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool isSave = true);
+		void Delete(TEntity entity );
+		Task DeleteAsync(TEntity entity );
+		void Delete(int id );
+		Task DeleteAsync(int id );
+		void Delete(Expression<Func<TEntity, bool>> predicate );
+		Task DeleteAsync(Expression<Func<TEntity, bool>> predicate );
 		#endregion
 
 		#region 其他方法

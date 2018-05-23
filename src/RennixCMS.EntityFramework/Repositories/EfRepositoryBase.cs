@@ -16,14 +16,14 @@ namespace RennixCMS.EntityFramework.Repositories
 {
 	public class EfRepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
 	{
-		public EfRepositoryBase(IUnitOfWorkContext dbContext)
+		private readonly ApplicationDbContextBase _db;
+        private readonly DbSet<TEntity> _dbSet;
+
+		public EfRepositoryBase(ApplicationDbContextBase db)
 		{
-			UnitOfWorkDbContext = dbContext;
+			_db = db;
+			_dbSet = _db.Set<TEntity>();
 		}
-
-		public IUnitOfWorkContext UnitOfWorkDbContext { get; set; }
-
-		public DbSet<TEntity> Table => this.UnitOfWorkDbContext.Set<TEntity>();
 
 		#region 仓储实现
 		public virtual IQueryable<TEntity> GetAll()
@@ -33,7 +33,7 @@ namespace RennixCMS.EntityFramework.Repositories
 
 		public virtual IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] propertySelectors)
 		{
-			var query = Table.AsQueryable();
+			var query = _dbSet.AsQueryable();
 
 			if (!propertySelectors.IsNullOrEmpty())
 			{
@@ -71,47 +71,37 @@ namespace RennixCMS.EntityFramework.Repositories
 			return await GetAll().FirstOrDefaultAsync(predicate);
 		}
 
-		public virtual TEntity Insert(TEntity entity, bool isSave = true)
+		public virtual TEntity Insert(TEntity entity )
 		{
-			return Table.Add(entity).Entity;
+			return _dbSet.Add(entity).Entity;
 		}
 
-		public virtual async Task<TEntity> InsertAsync(TEntity entity, bool isSave = true)
+		public virtual async Task<TEntity> InsertAsync(TEntity entity )
 		{
 			Insert(entity);
 
-			if (isSave)
-				UnitOfWorkDbContext.Commit();
-
 			return await Task.FromResult(entity);
 		}
 
-		public virtual TEntity Update(TEntity entity, bool isSave = true)
+		public virtual TEntity Update(TEntity entity )
 		{
-			UnitOfWorkDbContext.RegisterModified(entity);
-
-			if (isSave)
-				UnitOfWorkDbContext.Commit();
-
+			this._db.Entry(entity).State = EntityState.Modified;
 			return entity;
 		}
 
-		public virtual async Task<TEntity> UpdateAsync(TEntity entity, bool isSave = true)
+		public virtual async Task<TEntity> UpdateAsync(TEntity entity )
 		{
 			Update(entity);
-
-			if (isSave)
-				UnitOfWorkDbContext.Commit();
 
 			return await Task.FromResult(entity);
 		}
 
-		public virtual void Delete(TEntity entity, bool isSave = true)
+		public virtual void Delete(TEntity entity )
 		{
-			Delete(entity, isSave);
+			_dbSet.Remove(entity);
 		}
 
-		public virtual void Delete(int id, bool isSave = true)
+		public virtual void Delete(int id )
 		{
 			var entity = FirstOrDefault(id);
 			if (entity != null)
@@ -147,7 +137,7 @@ namespace RennixCMS.EntityFramework.Repositories
 
 		public virtual TEntity Get(int id)
 		{
-			throw new NotImplementedException();
+			return FirstOrDefault(x => x.Id == id);
 		}
 
 		public virtual async Task<TEntity> GetAsync(int id)
@@ -185,28 +175,25 @@ namespace RennixCMS.EntityFramework.Repositories
 			return GetAll().Where(predicate).ToList();
 		}
 
-		public virtual async Task DeleteAsync(TEntity entity, bool isSave = true)
+		public virtual async Task DeleteAsync(TEntity entity )
 		{
 			await DeleteAsync(x => x.Id.Equals(entity.Id));
 		}
 
-		public virtual async Task DeleteAsync(int id, bool isSave = true)
+		public virtual async Task DeleteAsync(int id )
 		{
 			await DeleteAsync(x => x.Id.Equals(id));
 		}
 
-		public virtual void Delete(Expression<Func<TEntity, bool>> predicate, bool isSave = true)
+		public virtual void Delete(Expression<Func<TEntity, bool>> predicate )
 		{
 			foreach (var item in GetAll().Where(predicate))
 			{
-				UnitOfWorkDbContext.RegisterModified(item);
+				Delete(item);
 			}
-
-			if (isSave)
-				UnitOfWorkDbContext.Commit();
 		}
 
-		public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool isSave = true)
+		public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate )
 		{
 			await Task.Factory.StartNew(() => Delete(predicate));
 		}

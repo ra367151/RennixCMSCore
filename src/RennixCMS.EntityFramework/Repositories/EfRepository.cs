@@ -10,7 +10,7 @@ namespace RennixCMS.EntityFramework.Repositories
     public class EfRepository<TEntity> : EfRepositoryBase<TEntity>
 		where TEntity : class,IEntity
 	{
-		public EfRepository(IUnitOfWorkContext dbContext):base(dbContext)
+		public EfRepository(ApplicationDbContextBase dbContext):base(dbContext)
 		{
 		}
 	}
