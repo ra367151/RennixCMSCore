@@ -15,6 +15,8 @@ using RennixCMS.Domain.Identity.User.Models;
 using RennixCMS.Domain.Identity.Role.Models;
 using RennixCMS.Infrastructure.Data.Repository;
 using RennixCMS.EntityFramework.Repositories;
+using RennixCMS.Infrastructure.Data.UnitOfWork;
+using RennixCMS.EntityFramework.UnitOfWork;
 
 namespace RennixCMS.Web
 {
@@ -30,19 +32,24 @@ namespace RennixCMS.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			services.AddScoped(typeof(ApplicationDbContextBase), typeof(ApplicationDbContext));
+            // 数据库上下文
+            services.AddScoped(typeof(ApplicationDbContextBase), typeof(ApplicationDbContext));
+            // 数据仓储
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            // 工作单元
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            // 工作单元工厂
+            services.AddScoped(typeof(IUnitOfWorkFactory), typeof(DefaultUnitOfWorkFactory));
 
-			services.AddDbContext<ApplicationDbContextBase>(options =>
+            services.AddDbContext<ApplicationDbContextBase>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RennixCMS")));
 
-			services.AddIdentity<User, Role>()
-				.AddEntityFrameworkStores<ApplicationDbContextBase>()
-				.AddDefaultTokenProviders();
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationDbContextBase>()
+                .AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
-			services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddMvc();
         }

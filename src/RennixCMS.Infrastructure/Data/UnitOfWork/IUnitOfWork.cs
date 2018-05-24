@@ -5,10 +5,10 @@ using RennixCMS.Infrastructure.Data.Repository;
 
 namespace RennixCMS.Infrastructure.Data.UnitOfWork
 {
-	public interface IUnitOfWork
+	public interface IUnitOfWork:IDisposable
 	{
 		IRepository<TEntity> Repository<TEntity>() where TEntity : class, IEntity;
 
-		void Commit();
+		void SaveChanges();
 	}
 }

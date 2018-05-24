@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RennixCMS.Domain.Identity.RoleClaim.Models;
 using RennixCMS.Domain.Identity.User.Models;
+using RennixCMS.Domain.Identity.UserLogin.Models;
 using RennixCMS.Infrastructure.Data.Repository;
+using RennixCMS.Infrastructure.Data.UnitOfWork;
 using RennixCMS.Web.Models;
 
 namespace RennixCMS.Web.Controllers
 {
     public class HomeController : Controller
     {
-		private readonly IRepository<User> _repository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-		public HomeController(IRepository<User> repository,IRepository<RoleClaim> repository2)
+        public HomeController(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_repository = repository;
-
-			var a = _repository.FirstOrDefault(x=>true);
-			var b = _repository.GetAllList();
+            _unitOfWorkFactory = unitOfWorkFactory;
 		}
 
         public IActionResult Index()

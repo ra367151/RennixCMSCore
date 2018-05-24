@@ -11,13 +11,14 @@ using RennixCMS.Infrastructure.Data.UnitOfWork;
 
 namespace RennixCMS.EntityFramework.UnitOfWork
 {
-	class UnitOfWork : IUnitOfWork, IDisposable
+	public class UnitOfWork : IUnitOfWork, IDisposable
 	{
 
 		private bool _disposed;
 		private readonly ApplicationDbContextBase _dbContext;
 		private readonly IServiceProvider _serviceProvider;
 		private Hashtable _repositories;
+        private bool _hasCommited = false;
 
 		public UnitOfWork(ApplicationDbContextBase dbContext, IServiceProvider serviceProvider)
 		{
@@ -59,9 +60,13 @@ namespace RennixCMS.EntityFramework.UnitOfWork
 			return (IRepository<TEntity>)this._repositories[typeName];
 		}
 
-		public void Commit()
+		public void SaveChanges()
 		{
-			this._dbContext.SaveChanges();
+            if (_hasCommited)
+                throw new InvalidOperationException("不能在一个工作单元中多次调用SaveChanges()方法，您应该总是在所有操作完成之后调用SaveChanges()");
+
+            this._dbContext.SaveChanges();
+            _hasCommited = true;
 		}
 
 		#endregion
