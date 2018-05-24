@@ -10,11 +10,11 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Extionsions
 {
-    public static class ApplicationBusinessServiceExtensions
+    public static class ApplicationBusinessServiceExtension
     {
         private static List<KeyValuePair<Type, Type>> allTypes;
 
-        static ApplicationBusinessServiceExtensions()
+        static ApplicationBusinessServiceExtension()
         {
             var cacheTypes = Assembly
                      .GetEntryAssembly()

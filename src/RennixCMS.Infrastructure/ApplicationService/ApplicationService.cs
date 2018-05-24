@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using RennixCMS.Infrastructure.Data;
@@ -21,18 +22,16 @@ namespace RennixCMS.Infrastructure.ApplicationService
 
         public ILogger Logger { get; private set; }
 
-        public TDto MapToDto<TDto, TEntity>(TEntity entity)
+        public async Task<TDto> MapToDtoAsync<TDto>(object entity)
             where TDto : class, IDto
-            where TEntity : class, IEntity
         {
-            return _mapper.Map<TDto>(entity);
+            return await Task.FromResult(_mapper.Map<TDto>(entity));
         }
 
-        public TEntity MapToEntity<TEntity, TDto>(TDto entity)
-            where TDto : class, IDto
+        public async Task<TEntity> MapToEntityAsync<TEntity>(object dto)
             where TEntity : class, IEntity
         {
-            return _mapper.Map<TEntity>(entity);
+            return await Task.FromResult(_mapper.Map<TEntity>(dto));
         }
 
         private void Initialize()

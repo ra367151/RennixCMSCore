@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RennixCMS.Domain.Category.Models;
+using RennixCMS.Domain.Comment.Models;
 using RennixCMS.Domain.Identity.Role.Models;
 using RennixCMS.Domain.Identity.RoleClaim.Models;
 using RennixCMS.Domain.Identity.User.Models;
@@ -22,6 +24,12 @@ namespace RennixCMS.EntityFramework.DbContext
 		{
 			
 		}
+
+		public DbSet<Comment> Comment { get; set; }
+
+		public DbSet<Domain.Post.Models.Post> Post { get; set; }
+
+		public DbSet<Category> Category { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

@@ -20,6 +20,56 @@ namespace RennixCMS.EntityFramework.Migrations
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("RennixCMS.Domain.Category.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("ParentId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("RennixCMS.Domain.Comment.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Author");
+
+                    b.Property<string>("AuthorIp");
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<int>("CreateUserId");
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<bool>("IsVisible");
+
+                    b.Property<DateTime?>("LastModifyTime");
+
+                    b.Property<int>("LastModifyUserId");
+
+                    b.Property<int>("ParentId");
+
+                    b.Property<string>("PostId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("RennixCMS.Domain.Identity.Role.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -180,6 +230,38 @@ namespace RennixCMS.EntityFramework.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserToken");
+                });
+
+            modelBuilder.Entity("RennixCMS.Domain.Post.Models.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Author");
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<int>("CreateUserId");
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<bool>("IsVisiable");
+
+                    b.Property<DateTime?>("LastModifyTime");
+
+                    b.Property<int>("LastModifyUserId");
+
+                    b.Property<string>("Link");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Post");
                 });
 
             modelBuilder.Entity("RennixCMS.Domain.Identity.RoleClaim.Models.RoleClaim", b =>

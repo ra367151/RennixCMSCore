@@ -18,7 +18,6 @@ using RennixCMS.EntityFramework.Repositories;
 using RennixCMS.Infrastructure.Data.UnitOfWork;
 using RennixCMS.EntityFramework.UnitOfWork;
 using Microsoft.Extensions.Logging;
-using RennixCMS.Application.Content;
 using RennixCMS.Infrastructure.Extionsions;
 using AutoMapper;
 
@@ -68,8 +67,6 @@ namespace RennixCMS.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //AutoMapperConfiguration.RegisterMapperConfiguration();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

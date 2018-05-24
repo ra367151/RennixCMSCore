@@ -4,6 +4,7 @@ using RennixCMS.Infrastructure.Data.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RennixCMS.Infrastructure.ApplicationService
 {
@@ -18,23 +19,18 @@ namespace RennixCMS.Infrastructure.ApplicationService
         /// 将实体映射为Dto
         /// </summary>
         /// <typeparam name="TDto"></typeparam>
-        /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        TDto MapToDto<TDto, TEntity>(TEntity entity)
-            where TEntity : class, IEntity
+        Task<TDto> MapToDtoAsync<TDto>(object entity)
             where TDto : class, IDto;
 
-        /// <summary>
-        /// dto转换为实体
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TDto"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        TEntity MapToEntity<TEntity, TDto>(TDto entity)
-            where TEntity : class, IEntity
-            where TDto : class, IDto;
-
+		/// <summary>
+		/// dto转换为实体
+		/// </summary>
+		/// <typeparam name="TEntity"></typeparam>
+		/// <param name="entity"></param>
+		/// <returns></returns>
+		Task<TEntity> MapToEntityAsync<TEntity>(object entity)
+			where TEntity : class, IEntity;
     }
 }

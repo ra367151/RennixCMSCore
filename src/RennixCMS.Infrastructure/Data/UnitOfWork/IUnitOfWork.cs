@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using RennixCMS.Infrastructure.Data.Repository;
 
 namespace RennixCMS.Infrastructure.Data.UnitOfWork
@@ -9,6 +10,6 @@ namespace RennixCMS.Infrastructure.Data.UnitOfWork
 	{
 		IRepository<TEntity> Repository<TEntity>() where TEntity : class, IEntity;
 
-		void SaveChanges();
+		Task<int> SaveChangesAsync();
 	}
 }

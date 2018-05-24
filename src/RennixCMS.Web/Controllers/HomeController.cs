@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RennixCMS.Application.Content;
+using RennixCMS.Application.Post;
 using RennixCMS.Domain.Identity.RoleClaim.Models;
 using RennixCMS.Domain.Identity.User.Models;
 using RennixCMS.Domain.Identity.UserLogin.Models;
@@ -17,16 +17,16 @@ namespace RennixCMS.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IPageAppService _pageAppService;
-        public HomeController(IUnitOfWorkFactory unitOfWorkFactory, IPageAppService pageAppService)
+        private readonly IPostAppService _postAppService;
+        public HomeController(IUnitOfWorkFactory unitOfWorkFactory, IPostAppService postAppService)
 		{
             _unitOfWorkFactory = unitOfWorkFactory;
-            _pageAppService = pageAppService;
+			_postAppService = postAppService;
 		}
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            _pageAppService.Test();
+            await _postAppService.GetListAsync(new Domain.Post.Dtos.PostFilterDto());
             return View();
         }
 
