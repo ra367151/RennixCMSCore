@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RennixCMS.Domain\RennixCMS.Domain.csproj" />
     <ProjectReference Include="..\RennixCMS.EntityFramework\RennixCMS.EntityFramework.csproj" />
     <ProjectReference Include="..\RennixCMS.Infrastructure\RennixCMS.Infrastructure.csproj" />
