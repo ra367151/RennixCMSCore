@@ -22,7 +22,12 @@ namespace RennixCMS.EntityFramework.Configuration
 		/// <param name="builder"></param>
 		public static void LoadAllFromFluentApi(this ModelBuilder builder)
 		{
-			var types = Assembly.GetExecutingAssembly().GetTypes();
+			var types = new List<Type>();
+
+			foreach (AssemblyName item in Assembly.GetExecutingAssembly().GetReferencedAssemblies())
+			{
+				types.AddRange(Assembly.Load(item).GetTypes());
+			}
 
 			var configurationTypes = types.Where(x => x.IsPublic
 								&& !x.IsAbstract
