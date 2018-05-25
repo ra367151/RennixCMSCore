@@ -5,6 +5,9 @@ using RennixCMS.Infrastructure.Data.Dto;
 
 namespace RennixCMS.Domain.Post.Dtos
 {
+	/// <summary>
+	/// PostDto
+	/// </summary>
     public class PostDto:IDto
     {
 		public int Id { get; set; }

@@ -20,6 +20,8 @@ using RennixCMS.EntityFramework.UnitOfWork;
 using Microsoft.Extensions.Logging;
 using RennixCMS.Infrastructure.Extionsions;
 using AutoMapper;
+using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 
 namespace RennixCMS.Web
 {
@@ -62,6 +64,13 @@ namespace RennixCMS.Web
             services.AddAutoMapper();
 
             services.AddMvc();
+
+			services.AddSwaggerGen(options =>
+			{
+				options.SwaggerDoc("v1", new Info() { Title = "Swagger Test UI", Version = "v1" });
+				options.CustomSchemaIds(type => type.FullName); // 解决相同类名会报错的问题
+				options.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SwaggerUI.xml")); // 标注要使用的 XML 文档
+			});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,8 +88,15 @@ namespace RennixCMS.Web
             }
 
             app.UseStaticFiles();
-            
-            app.UseAuthentication();
+
+			app.UseSwagger();
+			// 在这里面可以注入
+			app.UseSwaggerUI(options =>
+			{
+				options.SwaggerEndpoint("/swagger/v1/swagger.json", "HKERP API V1");
+			});
+
+			app.UseAuthentication();
             
             app.UseMvc(routes =>
             {
