@@ -23,23 +23,56 @@ namespace RennixCMS.WebApi.Controllers
 			_postAppService = postAppService;
 		}
 
-		/// <summary>
-		/// /获取一个档案
-		/// </summary>
-		/// <param name="id">档案id</param>
-		/// <returns></returns>
-		[HttpGet]
-		[Route("{id}")]
-		public async Task<ResponseResult<PostDto>> Get(int id)
+		[HttpPost]
+		[Route("ChangeVisiableState")]
+		public async Task<ResponseResult> ChangeVisiableStateAsync(int id, bool isVisiable)
 		{
-			return ResponseResult<PostDto>.Create(await _postAppService.GetPostAsync(id));
+			await _postAppService.ChangeVisiableStateAsync(id, isVisiable);
+			return ResponseResult.CreateVoidResult();
+		}
+
+		[HttpGet]
+		[Route("Count")]
+		public async Task<ResponseResult<int>> CountAsync()
+		{
+			return ResponseResult.Create(await _postAppService.CountAsync());
 		}
 
 		[HttpPost]
-		[Route("list")]
-		public async Task<ResponseResult<PageResult<PostDto>>> GetPostList(PostFilterDto dto)
+		[Route("Create")]
+		public async Task<ResponseResult<PostDto>> CreatePostAsync(PostDto dto)
 		{
-			return ResponseResult<PostDto>.Create(await _postAppService.GetListAsync(dto));
+			return ResponseResult.Create(await _postAppService.CreatePostAsync(dto));
+		}
+
+		[HttpPost]
+		[Route("Delete/{id}")]
+		public async Task<ResponseResult> DeletePostAsync(int id)
+		{
+			await _postAppService.DeletePostAsync(id);
+			return ResponseResult.CreateVoidResult();
+		}
+
+		[HttpPost]
+		[Route("List")]
+		public async Task<ResponseResult<PageResult<PostDto>>> GetListAsync(PostFilterDto dto)
+		{
+			return ResponseResult.Create(await _postAppService.GetListAsync(dto));
+		}
+
+		[HttpGet]
+		[Route("{id}")]
+		public async Task<ResponseResult<PostDto>> GetPostAsync(int id)
+		{
+			return ResponseResult.Create(await _postAppService.GetPostAsync(id));
+		}
+
+		[HttpPost]
+		[Route("Update")]
+		public async Task<ResponseResult> UpdatePostAsync(UpdatePostDto dto)
+		{
+			await _postAppService.UpdatePostAsync(dto);
+			return ResponseResult.CreateVoidResult();
 		}
 	}
 }

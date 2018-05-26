@@ -15,7 +15,7 @@ namespace RennixCMS.Infrastructure.WebApi
 		{
 			var ex = context.Exception;
 
-			var response = ResponseResult<Exception>.Create<Exception>(ex);
+			var response = ResponseResult.CreateExceptionResult(ex);
 
 			context.Result = new JsonResult(response);
 

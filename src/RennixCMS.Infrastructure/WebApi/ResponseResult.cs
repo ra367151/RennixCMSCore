@@ -9,6 +9,22 @@ namespace RennixCMS.Infrastructure.WebApi
 	[Serializable]
 	public class ResponseResult<TData>
 	{
+		[JsonProperty("data")]
+		public virtual TData Data { get; set; }
+
+		[JsonProperty("success")]
+		public virtual bool Success => this.Code == 200;
+
+		[JsonProperty("code")]
+		public virtual int Code { get; set; }
+
+		[JsonProperty("error_message")]
+		public virtual string ErrorMessage { get; set; }
+	}
+
+	[Serializable]
+	public class ResponseResult : ResponseResult<object>
+	{
 		/// <summary>
 		/// 
 		/// </summary>
@@ -27,31 +43,30 @@ namespace RennixCMS.Infrastructure.WebApi
 			};
 		}
 
-		public static ResponseResult<TData> Create<TException>(Exception ex)
+		public static ResponseResult CreateExceptionResult(Exception ex)
 		{
 			var message = ex?.GetFriendlyMessage();
 
-			if(string.IsNullOrEmpty(message))
-				message = "应用程序错误"; 
+			if (string.IsNullOrEmpty(message))
+				message = "应用程序错误";
 
-			return new ResponseResult<TData>
+			return new ResponseResult
 			{
 				Code = 500,
-				Data = default(TData),
+				Data = null,
 				ErrorMessage = message
 			};
 		}
 
-		[JsonProperty("data")]
-		public virtual TData Data { get; set; }
+		public static ResponseResult CreateVoidResult()
+		{
+			return new ResponseResult
+			{
+				Code = 200,
+				Data = null,
+				ErrorMessage = string.Empty
+			};
+		}
 
-		[JsonProperty("success")]
-		public virtual bool Success => this.Code == 200;
-
-		[JsonProperty("code")]
-		public virtual int Code { get; set; }
-
-		[JsonProperty("error_message")]
-		public virtual string ErrorMessage { get; set; }
 	}
 }
