@@ -9,7 +9,7 @@ namespace RennixCMS.Application.Post
 {
 	public interface IPostAppService
 	{
-		Task<PostDto> CreatePostAsync(PostDto dto);
+		Task<PostDto> CreatePostAsync(CreatePostDto dto);
 
 		Task UpdatePostAsync(UpdatePostDto dto);
 

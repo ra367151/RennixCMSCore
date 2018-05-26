@@ -40,7 +40,7 @@ namespace RennixCMS.WebApi.Controllers
 
 		[HttpPost]
 		[Route("Create")]
-		public async Task<ResponseResult<PostDto>> CreatePostAsync(PostDto dto)
+		public async Task<ResponseResult<PostDto>> CreatePostAsync(CreatePostDto dto)
 		{
 			return ResponseResult.Create(await _postAppService.CreatePostAsync(dto));
 		}

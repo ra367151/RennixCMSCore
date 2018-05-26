@@ -40,7 +40,7 @@ namespace RennixCMS.Application.Post
 			}
 		}
 
-		public async Task<PostDto> CreatePostAsync(PostDto dto)
+		public async Task<PostDto> CreatePostAsync(CreatePostDto dto)
 		{
 			using (var scope = _unitOfWorkFactory.CreateScope())
 			{
@@ -50,7 +50,14 @@ namespace RennixCMS.Application.Post
 
 				scope.Repository<Domain.Post.Models.Post>().Insert(entity);
 
-				await scope.SaveChangesAsync();
+				try
+				{
+					await scope.SaveChangesAsync();
+				}
+				catch (Exception ex)
+				{
+					throw;
+				}
 
 				return await MapToDtoAsync<PostDto>(entity);
 			}
@@ -61,6 +68,7 @@ namespace RennixCMS.Application.Post
 			using (var scope = _unitOfWorkFactory.CreateScope())
 			{
 				await scope.Repository<Domain.Post.Models.Post>().DeleteAsync(x => x.Id == id);
+				await scope.SaveChangesAsync();
 			}
 		}
 

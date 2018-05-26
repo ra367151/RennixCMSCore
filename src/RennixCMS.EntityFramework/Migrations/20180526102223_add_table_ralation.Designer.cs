@@ -11,66 +11,15 @@ using System;
 namespace RennixCMS.EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180526102223_add_table_ralation")]
+    partial class add_table_ralation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("RennixCMS.Domain.Category.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("ParentId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category");
-                });
-
-            modelBuilder.Entity("RennixCMS.Domain.Comment.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Author");
-
-                    b.Property<string>("AuthorIp");
-
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime>("CreateTime");
-
-                    b.Property<int>("CreateUserId");
-
-                    b.Property<bool>("IsVisible");
-
-                    b.Property<DateTime?>("LastModifyTime");
-
-                    b.Property<int>("LastModifyUserId");
-
-                    b.Property<int>("ParentId");
-
-                    b.Property<string>("PostId");
-
-                    b.Property<int?>("PostId1");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId1");
-
-                    b.ToTable("Comment");
-                });
 
             modelBuilder.Entity("RennixCMS.Domain.Identity.Role.Models.Role", b =>
                 {
@@ -234,45 +183,6 @@ namespace RennixCMS.EntityFramework.Migrations
                     b.ToTable("UserToken");
                 });
 
-            modelBuilder.Entity("RennixCMS.Domain.Post.Models.Post", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Author");
-
-                    b.Property<int>("CategoryId");
-
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime>("CreateTime");
-
-                    b.Property<int>("CreateUserId");
-
-                    b.Property<bool>("IsVisiable");
-
-                    b.Property<DateTime?>("LastModifyTime");
-
-                    b.Property<int>("LastModifyUserId");
-
-                    b.Property<string>("Link");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Post");
-                });
-
-            modelBuilder.Entity("RennixCMS.Domain.Comment.Models.Comment", b =>
-                {
-                    b.HasOne("RennixCMS.Domain.Post.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId1");
-                });
-
             modelBuilder.Entity("RennixCMS.Domain.Identity.RoleClaim.Models.RoleClaim", b =>
                 {
                     b.HasOne("RennixCMS.Domain.Identity.Role.Models.Role")
@@ -315,14 +225,6 @@ namespace RennixCMS.EntityFramework.Migrations
                     b.HasOne("RennixCMS.Domain.Identity.User.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RennixCMS.Domain.Post.Models.Post", b =>
-                {
-                    b.HasOne("RennixCMS.Domain.Category.Models.Category", "Category")
-                        .WithMany("Posts")
-                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

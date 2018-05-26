@@ -15,5 +15,6 @@ namespace RennixCMS.Domain.Category.Models
 
 		public string Description { get; set; }
 
+		public virtual IEnumerable<Post.Models.Post> Posts { get; set; }
 	}
 }

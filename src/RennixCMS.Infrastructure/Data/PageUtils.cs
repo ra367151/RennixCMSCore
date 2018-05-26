@@ -10,7 +10,7 @@ namespace RennixCMS.Infrastructure.Data
 		{
 			return new SkipTake
 			{
-				Skip = (dto.PageIndex - 1 * dto.PageSize) + 1,
+				Skip = (dto.PageIndex - 1) * dto.PageSize,
 				Take = dto.PageSize
 			};
 		}

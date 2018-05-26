@@ -19,6 +19,7 @@ namespace RennixCMS.Domain.Comment.Models
 		public int CreateUserId { get; set; }
 		public DateTime? LastModifyTime { get; set; }
 		public int LastModifyUserId { get; set; }
-		public bool IsDelete { get; set; }
+
+		public virtual Post.Models.Post Post { get; set; }
 	}
 }

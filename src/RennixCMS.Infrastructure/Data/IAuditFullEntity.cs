@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RennixCMS.Infrastructure.Data
 {
-	public interface IAuditFullEntity : IEntity, ISoftDeleteEntity
+	public interface IAuditFullEntity : IEntity
 	{
 		/// <summary>
 		/// 创建时间

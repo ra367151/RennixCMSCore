@@ -26,7 +26,6 @@ namespace RennixCMS.Infrastructure.Data.Repository
 
 		#endregion
 
-
 		#region 获取实体列表
 		List<TEntity> GetAllList();
 		Task<List<TEntity>> GetAllListAsync();

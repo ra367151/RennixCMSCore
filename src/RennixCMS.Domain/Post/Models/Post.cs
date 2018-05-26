@@ -5,8 +5,8 @@ using RennixCMS.Infrastructure.Data;
 
 namespace RennixCMS.Domain.Post.Models
 {
-    public class Post:IAuditFullEntity
-    {
+	public class Post : IAuditFullEntity
+	{
 		public int Id { get; set; }
 		public int CategoryId { get; set; }
 		public string Title { get; set; }
@@ -18,6 +18,8 @@ namespace RennixCMS.Domain.Post.Models
 		public DateTime? LastModifyTime { get; set; }
 		public int LastModifyUserId { get; set; }
 		public bool IsVisiable { get; set; }
-		public bool IsDelete { get; set; }
+
+		public virtual Domain.Category.Models.Category Category { get; set; }
+		public virtual IEnumerable<Comment.Models.Comment> Comments { get; set; }
 	}
 }
