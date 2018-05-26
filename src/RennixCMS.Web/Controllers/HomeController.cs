@@ -14,6 +14,9 @@ using RennixCMS.Web.Models;
 
 namespace RennixCMS.Web.Controllers
 {
+	/// <summary>
+	/// Home
+	/// </summary>
     public class HomeController : Controller
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
