@@ -23,6 +23,9 @@ namespace RennixCMS.Domain.Post.Dtos
 		public bool IsDelete { get; set; }
 		public bool IsVisiable { get; set; }
 
+		public virtual Domain.Category.Dtos.CategoryDto Category { get; set; }
+		public virtual IEnumerable<Domain.Comment.Dtos.CommentDto> Comments { get; set; }
+
 		public bool ValidateProperties()
 		{
 			return true;

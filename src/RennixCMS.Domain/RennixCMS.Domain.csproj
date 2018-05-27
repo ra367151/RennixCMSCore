@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Comment\Dtos\" />
-    <Folder Include="Category\Dtos\" />
     <Folder Include="Identity\UserToken\Dtos\" />
     <Folder Include="Identity\RoleClaim\Dtos\" />
     <Folder Include="Identity\UserRole\Dtos\" />

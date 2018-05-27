@@ -30,14 +30,14 @@ namespace RennixCMS.EntityFramework.UnitOfWork
 
 		public virtual void Dispose(bool disposing)
 		{
-			if (!this._disposed)
-			{
-				if (disposing)
-				{
-					this._dbContext.Dispose();
-				}
-			}
-			this._disposed = true;
+			//if (!this._disposed)
+			//{
+			//	if (disposing)
+			//	{
+			//		this._dbContext.Dispose();
+			//	}
+			//}
+			//this._disposed = true;
 		}
 
 		#region IUnitOfWork 成员
@@ -77,9 +77,9 @@ namespace RennixCMS.EntityFramework.UnitOfWork
 
 		public void Dispose()
 		{
-			this.Dispose(true);
+			//this.Dispose(true);
 
-			GC.SuppressFinalize(this);
+			//GC.SuppressFinalize(this);
 		}
 
 		#endregion

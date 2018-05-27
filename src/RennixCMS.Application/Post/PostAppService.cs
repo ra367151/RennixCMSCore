@@ -7,15 +7,21 @@ using RennixCMS.Domain.Post.Dtos;
 using RennixCMS.Infrastructure.Data;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace RennixCMS.Application.Post
 {
 	public class PostAppService : ApplicationService, IPostAppService
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		public PostAppService(IServiceProvider serviceProvider, IUnitOfWorkFactory unitOfWorkFactory) : base(serviceProvider)
+		private readonly IMapper _mapper;
+		public PostAppService(IServiceProvider serviceProvider,
+			IUnitOfWorkFactory unitOfWorkFactory,
+			IMapper mapper) : base(serviceProvider)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_mapper = mapper;
 		}
 
 		public async Task ChangeVisiableStateAsync(int id, bool isVisiable)
@@ -50,15 +56,8 @@ namespace RennixCMS.Application.Post
 
 				scope.Repository<Domain.Post.Models.Post>().Insert(entity);
 
-				try
-				{
-					await scope.SaveChangesAsync();
-				}
-				catch (Exception ex)
-				{
-					throw;
-				}
-
+				await scope.SaveChangesAsync();
+				
 				return await MapToDtoAsync<PostDto>(entity);
 			}
 		}
@@ -76,7 +75,8 @@ namespace RennixCMS.Application.Post
 		{
 			using (var scope = _unitOfWorkFactory.CreateScope())
 			{
-				var query = scope.Repository<Domain.Post.Models.Post>().GetAll();
+				var query = scope.Repository<Domain.Post.Models.Post>()
+					.GetAll();
 
 				// 一系列的筛选
 
@@ -115,6 +115,33 @@ namespace RennixCMS.Application.Post
 				await scope.Repository<Domain.Post.Models.Post>().UpdateAsync(entity);
 
 			    await scope.SaveChangesAsync();
+			}
+		}
+
+		public override bool IsAutoLoadNavigateProertiesOnMapToDto => true;
+		public async override Task IncludeNavigateProerties(object entity)
+		{
+			var e = entity as Domain.Post.Models.Post;
+
+			if (e == null)
+				return;
+
+			using (var scope = _unitOfWorkFactory.CreateScope())
+			{
+				if (e.Category == null)
+				{
+					e.Category =  scope.Repository<Domain.Category.Models.Category>().FirstOrDefault();
+				}
+
+				e.Comments = e.Comments ?? new List<Domain.Comment.Models.Comment>();
+
+				if (!e.Comments.Any())
+				{
+					e.Comments =  scope.Repository<Domain.Comment.Models.Comment>().GetAll()
+							.Where(x => x.PostId == e.Id)
+							.ToList();
+				}
+				await base.IncludeNavigateProerties(entity);
 			}
 		}
 	}

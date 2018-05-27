@@ -22,7 +22,7 @@ namespace RennixCMS.EntityFramework.DbContext
 		public ApplicationDbContext(DbContextOptions options)
 			:base(options)
 		{
-			
+
 		}
 
 		public DbSet<Comment> Comment { get; set; }
@@ -30,7 +30,7 @@ namespace RennixCMS.EntityFramework.DbContext
 		public DbSet<Domain.Post.Models.Post> Post { get; set; }
 
 		public DbSet<Category> Category { get; set; }
-
+		
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
