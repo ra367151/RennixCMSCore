@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using RennixCMS.Infrastructure.Extionsions;
 
 namespace RennixCMS.Application.Post
 {
@@ -78,8 +79,17 @@ namespace RennixCMS.Application.Post
 				var query = scope.Repository<Domain.Post.Models.Post>()
 					.GetAll();
 
-				// 一系列的筛选
+				query = query
+					.WhereIf(dto.Author.IsNotNullOrEmpty(), x => x.Author == dto.Author)
+					.WhereIf(dto.CategoryId.HasValue, x => x.CategoryId == dto.CategoryId)
+					.WhereIf(dto.Content.IsNotNullOrEmpty(), x => x.Content.Contains(dto.Content))
+					.WhereIf(dto.IsVisiable.HasValue, x => x.IsVisiable == dto.IsVisiable)
+					.WhereIf(dto.Title.IsNotNullOrEmpty(), x => x.Title.Contains(dto.Title))
+					.WhereIf(dto.BeginCreateTime.HasValue, x => x.CreateTime >= dto.BeginCreateTime)
+					.WhereIf(dto.EndCreateTime.HasValue, x => x.CreateTime < dto.EndCreateTime);
 
+
+				var count = query.Count();
 
 				var skipTake = PageUtils.GetSkipTake(dto);
 				query = query.OrderByDescending(x => x.CreateTime).Skip(skipTake.Skip).Take(skipTake.Take);
@@ -89,7 +99,7 @@ namespace RennixCMS.Application.Post
 					PageIndex = dto.PageIndex,
 					PageSize = dto.PageSize,
 					Data = query.AsEnumerable().Select(x => MapToDtoAsync<PostDto>(x).ConfigureAwait(false).GetAwaiter().GetResult()).ToList(),
-					TotalCount = query.Count()
+					TotalCount = count
 				});
 			}
 		}

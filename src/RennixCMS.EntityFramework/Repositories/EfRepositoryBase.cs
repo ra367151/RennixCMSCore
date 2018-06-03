@@ -42,7 +42,6 @@ namespace RennixCMS.EntityFramework.Repositories
 					query = query.Include(propertySelector);
 				}
 			}
-
 			return query;
 		}
 

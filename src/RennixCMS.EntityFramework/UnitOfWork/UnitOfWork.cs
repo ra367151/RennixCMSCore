@@ -63,12 +63,7 @@ namespace RennixCMS.EntityFramework.UnitOfWork
 
 		public async Task<int> SaveChangesAsync()
 		{
-            if (_hasCommited)
-                throw new InvalidOperationException("不能在一个工作单元中多次调用SaveChanges()方法，您应该总是在所有操作完成之后调用SaveChanges()");
-
-            var success =  this._dbContext.SaveChangesAsync();
-            _hasCommited = true;
-			return await success;
+			return await this._dbContext.SaveChangesAsync();
 		}
 
 		#endregion

@@ -14,5 +14,11 @@ namespace RennixCMS.Infrastructure.Data
 		public int TotalCount { get; set; }
 
 		public IList<TData> Data { get; set; }
+
+		public int TotalPages => Convert.ToInt32(Math.Ceiling(TotalCount * 1.0 / PageSize * 1.0));
+
+		public bool HasPreviewPage => PageIndex > 1 && PageIndex <= TotalPages;
+
+		public bool HasNextPage => PageIndex < TotalPages;
 	}
 }

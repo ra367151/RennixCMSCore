@@ -8,8 +8,6 @@ namespace RennixCMS.Domain.Post.Dtos
 {
 	public class PostFilterDto : PageQueryDto, IDto
 	{
-		public string CategoryName { get; set; }
-
 		public int? CategoryId { get; set; }
 
 		public string Title { get; set; }

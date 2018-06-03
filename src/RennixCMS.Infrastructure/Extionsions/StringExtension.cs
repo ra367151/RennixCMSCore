@@ -10,5 +10,10 @@ namespace RennixCMS.Infrastructure.Extionsions
 		{
 			return string.IsNullOrEmpty(source);
 		}
+
+		public static bool IsNotNullOrEmpty(this string source)
+		{
+			return !IsNullOrEmpty(source);
+		}
 	}
 }
