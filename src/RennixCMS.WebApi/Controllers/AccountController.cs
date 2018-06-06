@@ -48,6 +48,7 @@ namespace RennixCMS.WebApi.Controllers
             return ResponseResult.Create(new LoginResult("/"));
         }
 
+        [HttpGet]
         public async Task<ResponseResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -55,6 +56,7 @@ namespace RennixCMS.WebApi.Controllers
             return ResponseResult.CreateVoidResult();
         }
 
+        [HttpPost]
         public async Task<ResponseResult> Register()
         {
             return ResponseResult.CreateVoidResult();
