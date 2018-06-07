@@ -48,11 +48,13 @@ namespace RennixCMS.EntityFramework.UnitOfWork
 
 			if (!this._repositories.ContainsKey(typeName))
 			{
-				var paramDict = new Dictionary<string, object>();
-				paramDict.Add("context", this._dbContext);
+                var paramDict = new Dictionary<string, object>
+                {
+                    { "context", this._dbContext }
+                };
 
-				//Repository接口的实现统一在UnitOfWork中执行，
-				var repositoryInstance = _serviceProvider.GetService(typeof(IRepository<TEntity>));
+                //Repository接口的实现统一在UnitOfWork中执行，
+                var repositoryInstance = _serviceProvider.GetService(typeof(IRepository<TEntity>));
 
 				if (repositoryInstance != null)
 					this._repositories.Add(typeName, repositoryInstance);

@@ -34,6 +34,8 @@ namespace RennixCMS.WebApi.Controllers
         [HttpPost]
         public async Task<ResponseResult<LoginResultDto>> Login(LoginDto dto)
         {
+            dto.ValidateProperties();
+
             var signResult = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, !dto.RememberMe, false);
 
             if (signResult.IsLockedOut)
