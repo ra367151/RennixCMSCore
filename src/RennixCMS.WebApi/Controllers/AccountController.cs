@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RennixCMS.Domain.Identity.User.Models;
+using RennixCMS.Infrastructure.Exceptions;
 using RennixCMS.Infrastructure.WebApi;
 using RennixCMS.WebApi.ViewModels;
+using RennixCMS.WebApi.ViewModels.Account;
 
 namespace RennixCMS.WebApi.Controllers
 {
@@ -23,29 +25,29 @@ namespace RennixCMS.WebApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(UserManager<User> userManager,SignInManager<User> signManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signManager)
         {
             _userManager = userManager;
             _signInManager = signManager;
         }
 
         [HttpPost]
-        public async Task<ResponseResult<LoginResult>> Login(LoginViewModel dto)
+        public async Task<ResponseResult<LoginResultDto>> Login(LoginDto dto)
         {
-            var signResult = await _signInManager.PasswordSignInAsync(dto.Account,dto.Password,!dto.RememberMe,false);
-            
-            if(signResult.IsLockedOut)
+            var signResult = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, !dto.RememberMe, false);
+
+            if (signResult.IsLockedOut)
                 throw new RennixCMS.Infrastructure.Exceptions.RennixException("账号已被锁定");
 
-            if(!signResult.Succeeded)
+            if (!signResult.Succeeded)
                 throw new RennixCMS.Infrastructure.Exceptions.RennixException("账号或密码错误");
 
             // 验证url合法性 只能跳转到合法的地址
-            if(CheckRedirectUrl(dto.ReturnUrl))
+            if (CheckRedirectUrl(dto.ReturnUrl))
             {
-               return  ResponseResult.Create(new LoginResult(dto.ReturnUrl));
+                return ResponseResult.Create(new LoginResultDto(dto.ReturnUrl));
             }
-            return ResponseResult.Create(new LoginResult("/"));
+            return ResponseResult.Create(new LoginResultDto("/"));
         }
 
         [HttpGet]
@@ -57,9 +59,32 @@ namespace RennixCMS.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseResult> Register()
+        public async Task<ResponseResult<RegisterResultDto>> Register(RegisterDto dto)
         {
-            return ResponseResult.CreateVoidResult();
+            dto.ValidateProperties();
+
+            var user = new User { UserName = dto.Email, Email = dto.Email };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+
+            if (result.Succeeded)
+            {
+                // 发送账号激活邮件
+                // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                if (CheckRedirectUrl(dto.ReturnUrl))
+                {
+                    return ResponseResult.Create(new RegisterResultDto(dto.ReturnUrl));
+                }
+                return ResponseResult.Create(new RegisterResultDto("/"));
+            }
+            else
+            {
+                var err = result.Errors.FirstOrDefault()?.Description;
+                throw new RennixException($"注册失败,{err}");
+            }
         }
 
         private bool CheckRedirectUrl(string returnUrl)

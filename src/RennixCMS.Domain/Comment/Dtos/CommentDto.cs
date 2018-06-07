@@ -20,9 +20,9 @@ namespace RennixCMS.Domain.Comment.Dtos
 		public DateTime? LastModifyTime { get; set; }
 		public int LastModifyUserId { get; set; }
 
-		public bool ValidateProperties()
+		public void ValidateProperties()
 		{
-			return true;
+			
 		}
 	}
 }

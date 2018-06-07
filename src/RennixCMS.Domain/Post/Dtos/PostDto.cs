@@ -26,9 +26,9 @@ namespace RennixCMS.Domain.Post.Dtos
 		public virtual Domain.Category.Dtos.CategoryDto Category { get; set; }
 		public virtual IEnumerable<Domain.Comment.Dtos.CommentDto> Comments { get; set; }
 
-		public bool ValidateProperties()
+		public void ValidateProperties()
 		{
-			return true;
+			
 		}
 	}
 }

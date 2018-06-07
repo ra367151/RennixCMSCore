@@ -13,9 +13,9 @@ namespace RennixCMS.Domain.Post.Dtos
 		public string Author { get; set; }
 		public string Link { get; set; }
 		public bool IsVisiable { get; set; }
-		public bool ValidateProperties()
+		public void ValidateProperties()
 		{
-			return true;
+			
 		}
 	}
 }

@@ -22,9 +22,9 @@ namespace RennixCMS.Domain.Post.Dtos
 
 		public DateTime? EndCreateTime { get; set; }
 
-		public bool ValidateProperties()
+		public void ValidateProperties()
 		{
-			return true;
+			
 		}
 	}
 }

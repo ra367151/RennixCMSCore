@@ -47,22 +47,23 @@
 
             <el-form :model="form" :rules="rules" ref="ruleForm" label-position="right" label-width="80px">
 
-                <el-form-item label="账号" prop="Account">
-                    <el-input v-model="form.Account" placeholder="请输入与用户名/手机号/邮箱" clearable></el-input>
+                <el-form-item label="账号" prop="email">
+                    <el-input type="email" v-model="form.email" placeholder="请输入邮箱地址" clearable></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码" prop="Password">
-                    <el-input type="password" v-model="form.Password" placeholder="请输入密码" clearable></el-input>
+                <el-form-item label="密码" prop="password">
+                    <el-input type="password" v-model="form.password" placeholder="请输入密码" clearable></el-input>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-checkbox v-model="form.RememerMe">记住密码</el-checkbox>
+                    <el-checkbox v-model="form.rememerMe">记住密码</el-checkbox>
 					<el-button id="btn-login" @@click="submitForm('ruleForm')" type="primary" :loading="isLogining">登&nbsp;录</el-button>
                 </el-form-item>
 
 				<el-form-item>
 					<a href="#">立即注册</a>
-					<a href="#"></a>
+                    <span>|</span>
+					<a href="#">找回密码</a>
 				</el-form-item>
 
             </el-form>
@@ -78,18 +79,18 @@
 		data: function () {
 			return {
 				form: {
-					Account: '',
-					Password: '',
-					RememerMe: true,
-					ReturnUrl: cms.util.queryString.getByName('returnUrl')
+					email: '',
+					password: '',
+					rememerMe: true,
+					returnUrl: cms.util.queryString.getByName('returnUrl')
 				},
 				// 是否正在登录中 用于展示按钮登录动画
 				isLogining: false,
 				rules: {
-					Account: [
-						{ required: true, message: '请输入账号', trigger: 'blur' }
+					email: [
+						{ required: true, message: '请输入邮箱', trigger: 'blur' }
 					],
-					Password: [
+					password: [
 						{ required: true, message: '请输入密码', trigger: 'blur' }
 					]
 				}
@@ -109,17 +110,19 @@
 										type: 'success'
 									});
 									location.href = res.body.data.redirectToUrl || '/';
-								}
+                                }
+                                this.isLogining = false;
 							})
 							.catch(function (err) {
 								this.$message({
 									message: err.body.error_message,
 									type: 'error'
 								});
-								me.form.password = '';
+                                me.form.password = '';
+                                this.isLogining = false;
 							})
 					}
-					this.isLogining = false;
+					
 				});
 			}
 		}

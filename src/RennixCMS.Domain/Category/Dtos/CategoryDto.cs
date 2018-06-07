@@ -16,9 +16,9 @@ namespace RennixCMS.Domain.Category.Dtos
 
 		public string Description { get; set; }
 
-		public bool ValidateProperties()
+		public void ValidateProperties()
 		{
-			return true;
+			
 		}
 	}
 }

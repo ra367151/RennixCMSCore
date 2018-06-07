@@ -11,6 +11,6 @@ namespace RennixCMS.Infrastructure.Data.Dto
         /// 验证字段
         /// </summary>
         /// <returns></returns>
-        public abstract bool ValidateProperties();
+        public abstract void ValidateProperties();
     }
 }
