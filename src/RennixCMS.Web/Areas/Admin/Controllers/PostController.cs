@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RennixCMS.Web.Areas.Admin.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("[area]/[controller]/[action]")]
-    public class HomeController : AdminAreaController
+    public class PostController : AdminAreaController
     {
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult List()
         {
             return View();
         }

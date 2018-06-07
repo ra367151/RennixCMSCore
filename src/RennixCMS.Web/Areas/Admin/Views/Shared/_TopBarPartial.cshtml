@@ -1,0 +1,59 @@
+﻿<div id="topbar">
+    <div class="logo">
+        <h1>RennixCMS</h1>
+    </div>
+    
+    <div class="topbar-menu">
+        <el-menu mode="horizontal"  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+
+            <el-submenu index="1">
+                <template slot="title">
+                    用户管理
+                </template>
+                <el-menu-item index="1-1">用户管理</el-menu-item>
+                <el-menu-item index="1-2">角色管理</el-menu-item>
+            </el-submenu>
+
+            <el-submenu index="2">
+                <template slot="title">
+                    统计图表
+                </template>
+                <el-menu-item index="2-1">访问统计</el-menu-item>
+                <el-menu-item index="2-2">阅读量统计</el-menu-item>
+                <el-menu-item index="2-3">行为分析</el-menu-item>
+            </el-submenu>
+
+            <el-submenu index="3">
+                <template slot="title">
+                    运行日志
+                </template>
+                <el-menu-item index="3-1">登录日志</el-menu-item>
+                <el-menu-item index="3-2">用户操作日志</el-menu-item>
+                <el-menu-item index="3-3">接口请求日志</el-menu-item>
+                <el-menu-item index="3-4">系统错误日志</el-menu-item>
+            </el-submenu>
+
+            <el-submenu index="4">
+                <template slot="title">
+                    高级工具
+                </template>
+                <el-menu-item index="4-1">SQL脚本执行</el-menu-item>
+                <el-menu-item index="4-2">页面静态化</el-menu-item>
+                <el-menu-item index="4-3">缓存管理</el-menu-item>
+                <el-menu-item index="4-4">日志清理</el-menu-item>
+            </el-submenu>
+        </el-menu>
+    </div>
+
+    <div class="admin-control">
+        <el-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+            <el-submenu index="1">
+                <template slot="title">
+                    @User.Identity.Name
+                </template>
+                <el-menu-item @@click="onModifyPassword" index="1-1">修改密码</el-menu-item>
+                <el-menu-item @@click="onLogout" index="1-2">注销</el-menu-item>
+            </el-submenu>
+        </el-menu>
+    </div>
+</div>

@@ -114,11 +114,16 @@ namespace RennixCMS.Web
 				  template: "{controller=Home}/{action=Index}/{id?}"
 				);
 
-				// 区域路由
-				routes.MapAreaRoute(
-				   name: "areas",
-				   areaName: "Admin",
-				   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+            // 区域路由
+            routes.MapAreaRoute(
+               name: "areas",
+               areaName: "Admin",
+               template: "{admin}/{controller}/{action}/{id?}",
+               defaults :new
+               {
+                   area ="admin",
+                   controller ="home",
+                   action ="index"}
 			   );
 			});
 		}

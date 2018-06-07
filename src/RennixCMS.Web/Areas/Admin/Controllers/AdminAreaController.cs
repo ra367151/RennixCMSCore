@@ -11,8 +11,9 @@ namespace RennixCMS.Web.Areas.Admin.Controllers
     /// <summary>
     /// Admin区域控制器基类
     /// </summary>
-    [Area("Admin")]
-    [Authorize(Roles = "Administrator")]
+    [Area("admin")]
+    [Authorize]
+    //[Authorize(Roles = "Administrator")]
     public abstract class AdminAreaController : Controller
     {
 

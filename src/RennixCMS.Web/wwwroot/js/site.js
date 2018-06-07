@@ -3,8 +3,14 @@
 var cms = {};
 cms.urls = {
     login:'/api/account/login',
-    register:'/api/account/register'
+    register: '/api/account/register',
+    logout:'/api/account/logout'
 }
+
+cms.pages = {
+    login: '/account/login',
+    resetPassword:'/account/resetPassword'
+};
 
 // 声明帮助类
 cms.util = {};
