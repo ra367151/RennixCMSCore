@@ -1,8 +1,28 @@
 ﻿@{
-    ViewData["Title"] = "Access denied";
+    ViewBag.Title = "访问受限";
 }
 
-<header>
-    <h2 class="text-danger">ViewData["Title"]</h2>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div id="app">
+
+</div>
+
+@section Scripts{
+    <script>
+        new Vue({
+            el: '#app',
+            methods: {
+                open() {
+                    this.$alert('对不起，您没有访问此资源的权限！', '访问受限', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            window.history.back(-1);
+                        }
+                    });
+                }
+            },
+            mounted: function(){
+                this.open();
+            }
+        })
+    </script>
+}
