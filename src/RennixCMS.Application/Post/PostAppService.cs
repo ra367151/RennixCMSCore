@@ -127,32 +127,5 @@ namespace RennixCMS.Application.Post
 			    await scope.SaveChangesAsync();
 			}
 		}
-
-		public override bool IsAutoLoadNavigateProertiesOnMapToDto => true;
-		public async override Task IncludeNavigateProerties(object entity)
-		{
-			var e = entity as Domain.Post.Models.Post;
-
-			if (e == null)
-				return;
-
-			using (var scope = _unitOfWorkFactory.CreateScope())
-			{
-				if (e.Category == null)
-				{
-					e.Category =  scope.Repository<Domain.Category.Models.Category>().FirstOrDefault();
-				}
-
-				e.Comments = e.Comments ?? new List<Domain.Comment.Models.Comment>();
-
-				if (!e.Comments.Any())
-				{
-					e.Comments =  scope.Repository<Domain.Comment.Models.Comment>().GetAll()
-							.Where(x => x.PostId == e.Id)
-							.ToList();
-				}
-				await base.IncludeNavigateProerties(entity);
-			}
-		}
 	}
 }

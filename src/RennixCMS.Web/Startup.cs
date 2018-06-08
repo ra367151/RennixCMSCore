@@ -24,6 +24,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using Microsoft.Extensions.Options;
 using RennixCMS.Infrastructure.WebApi;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RennixCMS.Web
 {
@@ -39,8 +41,17 @@ namespace RennixCMS.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// 数据库上下文
-			services.AddScoped(typeof(ApplicationDbContextBase), typeof(ApplicationDbContext));
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+
+            // 数据库上下文
+            services.AddScoped(typeof(ApplicationDbContextBase), typeof(ApplicationDbContext));
 			// 数据仓储
 			services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 			// 工作单元
@@ -49,7 +60,7 @@ namespace RennixCMS.Web
 			services.AddScoped(typeof(IUnitOfWorkFactory), typeof(DefaultUnitOfWorkFactory));
 
 			services.AddDbContext<ApplicationDbContextBase>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("RennixCMS")));
+				options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("RennixCMS")));
 
 			services.AddIdentity<User, Role>()
 				.AddEntityFrameworkStores<ApplicationDbContextBase>()
@@ -72,9 +83,10 @@ namespace RennixCMS.Web
 			.AddJsonOptions(options =>
 			{
 					options.SerializerSettings.DateFormatString = "yyyy/MM/dd hh:mm:ss";
-			});
+			})
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-			services.AddSwaggerGen(options =>
+            services.AddSwaggerGen(options =>
 			{
 				options.SwaggerDoc("v1", new Info() { Title = "Swagger Test UI", Version = "v1" });
 				options.CustomSchemaIds(type => type.FullName); // 解决相同类名会报错的问题
@@ -88,17 +100,22 @@ namespace RennixCMS.Web
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
-				app.UseBrowserLink();
 				app.UseDatabaseErrorPage();
 			}
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
-			}
+                app.UseHsts();
+            }
 
-			app.UseStaticFiles();
 
-			app.UseSwagger();
+            app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
+            app.UseCookiePolicy();
+
+            app.UseSwagger();
 			// 在这里面可以注入
 			app.UseSwaggerUI(options =>
 			{

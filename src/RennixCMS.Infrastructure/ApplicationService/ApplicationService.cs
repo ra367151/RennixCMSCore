@@ -25,10 +25,6 @@ namespace RennixCMS.Infrastructure.ApplicationService
         public async Task<TDto> MapToDtoAsync<TDto>(object entity)
             where TDto : class, IDto
         {
-			if (IsAutoLoadNavigateProertiesOnMapToDto)
-			{
-				IncludeNavigateProerties(entity);
-			}
             return await Task.FromResult(_mapper.Map<TDto>(entity));
         }
 
@@ -43,12 +39,5 @@ namespace RennixCMS.Infrastructure.ApplicationService
             this.Logger = (ILogger)_serviceProvider.GetService(typeof(ILogger));
             this._mapper = (IMapper)_serviceProvider.GetService(typeof(IMapper));
         }
-
-		public async virtual Task IncludeNavigateProerties(object entity)
-		{
-
-		}
-
-		public virtual bool IsAutoLoadNavigateProertiesOnMapToDto { get; set; }
 	}
 }
