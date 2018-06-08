@@ -1,49 +1,50 @@
-﻿body {
+﻿
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing:border-box;
+    border:none;
+}
+body {
     max-height:100vh;
+    display:flex;
+    flex-direction:row;
+    width:100%;
 }
 
-.el-submenu__icon-arrow, .el-icon-arrow-down {
-    display: none;
+.left {
+    
+}
+#leftbar {
+    width:220px;
+    height: 100vh;
+    background: rgb(84, 92, 100);
+}
+#leftbar .logo-wrapper {
+    background: rgb(84, 92, 100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:70px;
+}
+#leftbar .logo-wrapper img{
+    display:block;
+}
+.right {
+    flex-grow:1;
 }
 
 #topbar {
-    height:6vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display:flex;
+    flex-direction:row;
 }
-
-    #topbar .logo {
-        background: rgb(84, 92, 100);
-        width: 15%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #topbar .logo h1{
-        color:#ccc;
-    }
-
     #topbar .topbar-menu {
-        width: 75%;
+        flex-grow:1;
+    }
+    #topbar .account-control {
+        width:200px;
     }
 
-    #topbar .admin-control {
-        width: 10%;
-    }
-
-.body {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-#left-menu {
-    width: 15%;
-    height: 94vh;
-    background: rgb(84, 92, 100);
-}
-.body > main {
+.right main {
     padding:10px;
 }

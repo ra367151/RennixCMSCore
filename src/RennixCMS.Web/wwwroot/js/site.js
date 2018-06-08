@@ -4,7 +4,11 @@ var cms = {};
 cms.urls = {
     login:'/api/account/login',
     register: '/api/account/register',
-    logout:'/api/account/logout'
+    logout: '/api/account/logout',
+
+    post: {
+        list:'/api/post/getList'
+    }
 }
 
 cms.pages = {

@@ -1,1 +1,135 @@
-﻿List Page
+﻿<div id="app">
+    <div class="cms-filter">
+
+    </div>
+
+    <div class="cms-table">
+        <template v-if="tableData && tableData.length>0">
+            <el-table :data="tableData"
+                      style="width: 100%;">
+
+                <el-table-column label="标题"
+                                 width="400">
+                    <template slot-scope="scope">
+                        <a @@click.pre="handleTitleClicked(scope.row.id)" href="#">{{scope.row.title}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="category.name"
+                                 label="分类"
+                                 width="180">
+                </el-table-column>
+                <el-table-column label="展示状态"
+                                 width="80">
+                    <template slot-scope="scope">
+                        {{scope.row.isVisiable?'展示':'不展示'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="createTime"
+                                 label="创建时间"
+                                 width="180">
+                </el-table-column>
+                <el-table-column prop="lastModifyTime"
+                                 label="最后修改时间"
+                                 width="180">
+                </el-table-column>
+                <el-table-column prop="author"
+                                 label="作者"
+                                 width="180">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+
+                        <el-button v-if="scope.row.isVisiable" size="mini"
+                                   @@click="handleVisiable(scope.row.id,false)">取消展示</el-button>
+                        <el-button v-else size="mini"
+                                   @@click="handleVisiable(scope.row.id,true)">设为展示</el-button>
+
+                        <el-button size="mini"
+                                   @@click="handleEdit(scope.row.id)">编辑</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   @@click="handleDelete(scope.row.id)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+        <template v-else>
+            <h4>没有找到任何数据!</h4>
+        </template>
+    </div>
+
+    <div class="cms-pagination">
+        <el-pagination @@size-change="handlePageSizeChanged"
+                       @@current-change="handlePageIndexChanged"
+                       :page-size="filter.pageSize"
+                       layout="total, prev, pager, next"
+                       :total="totalCount">
+        </el-pagination>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    filter: {
+                        categoryId: '',
+                        title: '',
+                        content: '',
+                        author: '',
+                        isVisiable: '',
+                        eeginCreateTime: '',
+                        endCreateTime: '',
+                        pageIndex: 1,
+                        pageSize: 20
+                    },
+                    tableData: [],
+                    totalCount: 0
+                }
+            },
+            methods: {
+                loadTableData: function () {
+                    var me = this;
+                    Vue.http.get(cms.urls.post.list, me.filter)
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+                                me.tableData = body.data.data;
+                                me.totalCount = body.data.totalCount;
+                            } else {
+                                alert('加载出错' + body.error_message);
+                            }
+                        })
+                        .catch((err) => {
+                            alert('加载出错' + res.body.error_message);
+                        });
+                },
+                handlePageSizeChanged: function (pageSize) {
+                    this.filter.pageSize = pageSize;
+                    this.loadTableData();
+                },
+                handlePageIndexChanged: function (pageIndex) {
+                    this.filter.pageIndex = pageIndex;
+                    this.loadTableData();
+                },
+                handleEdit: function (id) { 
+
+                },
+                handleDelete: function () { 
+
+                },
+                handleVisiable: function (id, changeVisiableTo) { 
+                    
+                },
+                handleTitleClicked: function (id) {
+                    // 跳转到前台展示页面
+                    console.log(id);
+                }
+            },
+            created: function () {
+                this.loadTableData();
+            }
+        });
+    </script>
+}

@@ -22,16 +22,26 @@
 </head>
 <body>
 
-    <!--顶部菜单-->
-    @await Html.PartialAsync("_TopBarPartial")
-    <div class="body">
-
-        @await Html.PartialAsync("_LeftMenuPartial")
+    <section class="left">
+        <nav class="nav-left">
+            <!--左边菜单-->
+            @await Html.PartialAsync("_LeftMenuPartial")
+        </nav>
+    </section>
+    
+    <section class="right">
+        <nav class="nav-top">
+            <!--顶部菜单-->
+            @await Html.PartialAsync("_TopBarPartial")
+        </nav>
+        
+        <!--面包屑-->
 
         <main>
+            <!--内容区-->
             @RenderBody()
         </main>
-    </div>
+    </section>
 </body>
 </html>
 <script src="/js/backstage.js"></script>

@@ -29,7 +29,11 @@ var leftMenuVm = new Vue({
     el: '#left-menu',
     data: function () {
         return {
-            
+            defaultOpenMenus: [
+                '1-1',
+                '2-1',
+                '2-2'
+            ]
         };
     },
     methods: {
@@ -39,5 +43,9 @@ var leftMenuVm = new Vue({
         handleClose(key, keyPath) {
             console.log(key, keyPath);
         }
+    },
+    mounted: function () {
+        this.$refs['leftmenu'].open('1-1');
+        this.$refs['leftmenu'].open('2-1');
     }
 })

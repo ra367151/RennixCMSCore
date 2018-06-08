@@ -24,52 +24,45 @@ namespace RennixCMS.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("ChangeVisiableState")]
-        public async Task<ResponseResult> ChangeVisiableStateAsync(int id, bool isVisiable)
+        public async Task<ResponseResult> ChangeVisiableState(int id, bool isVisiable)
         {
             await _postAppService.ChangeVisiableStateAsync(id, isVisiable);
             return ResponseResult.CreateVoidResult();
         }
 
         [HttpGet]
-        [Route("Count")]
-        public async Task<ResponseResult<int>> CountAsync()
+        public async Task<ResponseResult<int>> Count()
         {
             return ResponseResult.Create(await _postAppService.CountAsync());
         }
 
         [HttpPost]
-        [Route("Create")]
-        public async Task<ResponseResult<PostDto>> CreatePostAsync(CreatePostDto dto)
+        public async Task<ResponseResult<PostDto>> CreatePost(CreatePostDto dto)
         {
             return ResponseResult.Create(await _postAppService.CreatePostAsync(dto));
         }
 
         [HttpPost]
-        [Route("Delete/{id}")]
-        public async Task<ResponseResult> DeletePostAsync(int id)
+        public async Task<ResponseResult> DeletePost(int id)
         {
             await _postAppService.DeletePostAsync(id);
             return ResponseResult.CreateVoidResult();
         }
 
-        [HttpPost]
-        [Route("List")]
-        public async Task<ResponseResult<PageResult<PostDto>>> GetListAsync(PostFilterDto dto)
+        [HttpGet]
+        public async Task<ResponseResult<PageResult<PostDto>>> GetList(PostFilterDto dto)
         {
             return ResponseResult.Create(await _postAppService.GetListAsync(dto));
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public async Task<ResponseResult<PostDto>> GetPostAsync(int id)
+        public async Task<ResponseResult<PostDto>> GetPost(int id)
         {
             return ResponseResult.Create(await _postAppService.GetPostAsync(id));
         }
 
         [HttpPost]
-        [Route("Update")]
-        public async Task<ResponseResult> UpdatePostAsync(UpdatePostDto dto)
+        public async Task<ResponseResult> UpdatePostc(UpdatePostDto dto)
         {
             await _postAppService.UpdatePostAsync(dto);
             return ResponseResult.CreateVoidResult();
