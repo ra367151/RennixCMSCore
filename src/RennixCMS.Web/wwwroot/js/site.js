@@ -8,12 +8,26 @@ cms.urls = {
 
     post: {
         list:'/api/post/getList'
+    },
+    category: {
+        get:'/api/category/get',
+        list: '/api/category/getlist',
+        create: '/api/category/create',
+        update: '/api/category/update',
+        delete:'/api/category/delete',
     }
 }
 
 cms.pages = {
     login: '/account/login',
-    resetPassword:'/account/resetPassword'
+    resetPassword: '/account/resetPassword',
+    backstage: {
+        post_list: '/post/list',
+        post_create: '/post/create',
+        post_update: '/post/update',
+        post_waste: '/post/waste',
+        category_list: '/category/list',
+    }
 };
 
 // 声明帮助类
@@ -94,3 +108,37 @@ cms.util.queryString = function() {
         getByIndex: getQueryStringByIndex
     };
 }();
+cms.util.dataConvert = {};
+cms.util.dataConvert.toTree = function (data) {
+    // 删除 所有 children,以防止多次调用
+    data.forEach(function (item) {
+        delete item.children;
+    });
+
+    // 将数据存储为 以 id 为 KEY 的 map 索引数据列
+    var map = {};
+    data.forEach(function (item) {
+        map[item.id] = item;
+    });
+
+    console.log(map);
+
+    var val = [];
+    data.forEach(function (item) {
+
+        // 以当前遍历项，的parentId,去map对象中找到索引的id
+        var parent = map[item.parentId];
+
+        // 好绕啊，如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
+        if (parent) {
+
+            (parent.children || (parent.children = [])).push(item);
+
+        } else {
+            //如果没有在map中找到对应的索引ID,那么直接把 当前的item添加到 val结果集中，作为顶级
+            val.push(item);
+        }
+    });
+    console.log(val);
+    return val;
+}

@@ -21,7 +21,7 @@ namespace RennixCMS.EntityFramework.DbContext
 	{
 		public ApplicationDbContextBase(DbContextOptions options) : base(options)
 		{
-
+            
 		}
 	}
 }

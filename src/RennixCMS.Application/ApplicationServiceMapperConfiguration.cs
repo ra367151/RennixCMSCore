@@ -14,7 +14,10 @@ namespace RennixCMS.Application
 			CreateMap<UpdatePostDto, Domain.Post.Models.Post>().ReverseMap();
 			CreateMap<CreatePostDto, Domain.Post.Models.Post>().ReverseMap();
 			CreateMap<CategoryDto, Domain.Category.Models.Category>().ReverseMap();
-			CreateMap<Domain.Comment.Dtos.CommentDto, Domain.Comment.Models.Comment>().ReverseMap();
+            CreateMap<CreateCategoryDto, Domain.Category.Models.Category>().ReverseMap();
+            CreateMap<UpdateCategoryDto, Domain.Category.Models.Category>().ReverseMap();
+
+            CreateMap<Domain.Comment.Dtos.CommentDto, Domain.Comment.Models.Comment>().ReverseMap();
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿var topBarVm = new Vue({
+﻿
+var topBarVm = new Vue({
     el: '#topbar',
     data: function () {
         return {
@@ -30,10 +31,9 @@ var leftMenuVm = new Vue({
     data: function () {
         return {
             defaultOpenMenus: [
-                '1-1',
-                '2-1',
-                '2-2'
-            ]
+            
+            ],
+            pages: cms.pages.backstage
         };
     },
     methods: {
@@ -42,10 +42,19 @@ var leftMenuVm = new Vue({
         },
         handleClose(key, keyPath) {
             console.log(key, keyPath);
+        },
+        locationTo: function (url, menuIndex) {
+
+            url = '/admin' + (url || '/home/index');
+
+            location.href = url + '?m=' + menuIndex;
         }
     },
     mounted: function () {
-        this.$refs['leftmenu'].open('1-1');
-        this.$refs['leftmenu'].open('2-1');
+        var openMenuIndex = cms.util.queryString.getByName('m');
+        console.log(openMenuIndex);
+        if (openMenuIndex) {
+            this.$refs['leftmenu'].open(openMenuIndex);
+        }
     }
 })

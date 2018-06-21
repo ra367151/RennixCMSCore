@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewData["Title"] = "栏目列表";
+    Layout = "~/Areas/Admin/Views/Shared/_Backstage.cshtml";
+}
+
+<div id="app">
+    <div>
+        <el-tree :data="tree"
+                 node-key="id"
+                 default-expand-all
+                 :expand-on-click-node="false">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
+                <span>
+                    <el-button type="text"
+                               size="mini"
+                               @@click="handleAppend(node.id)">
+                        添加子栏目
+                    </el-button>
+                    <el-button type="text"
+                               size="mini"
+                               @@click="handleRemove(node.id)">
+                        删除栏目
+                    </el-button>
+                </span>
+            </span>
+        </el-tree>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    tree: [],
+                } 
+            },
+            methods: {
+                handleRemove: function (id) { 
+
+                },
+                handleAppend: function (id) {
+
+                },
+                loadCategoryTree: function () {
+                    var me = this;
+                    Vue.http.get(cms.urls.category.list)
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+
+                                var data = body.data;
+
+                                var tree = cms.util.dataConvert.toTree(data);
+
+                                for (var item of me.tree) { 
+                                    delete item;
+                                }
+
+                                for (var item of tree) {
+                                    var current = item;
+                                    current.label = item.name;
+                                    me.tree.push(current);
+                                }
+                            } else {
+                                alert('加载出错' + body.error_message);
+                            }
+                        })
+                        .catch((err) => {
+                            alert('加载出错' + err.body.error_message);
+                        });
+                },
+                createCategory: function (data) { 
+
+                },
+                updateCategory: function (data) { 
+
+                },
+                deleteCategory: function (id) { 
+
+                },
+                getCategory: function (id) { 
+
+                }
+            },
+            mounted: function () {
+                this.loadCategoryTree();
+            }
+        });
+    </script>
+}

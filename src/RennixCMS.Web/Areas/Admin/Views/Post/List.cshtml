@@ -102,7 +102,7 @@
                             }
                         })
                         .catch((err) => {
-                            alert('加载出错' + res.body.error_message);
+                            alert('加载出错' + err.body.error_message);
                         });
                 },
                 handlePageSizeChanged: function (pageSize) {

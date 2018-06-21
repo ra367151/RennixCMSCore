@@ -17,5 +17,23 @@ namespace RennixCMS.Web.Areas.Admin.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Update()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Waste()
+        {
+            return View(nameof(List));
+        }
     }
 }
