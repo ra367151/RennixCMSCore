@@ -12,98 +12,99 @@
         .node-operation {
             padding-left: 200px;
         }
+
         .newOneLevelCategory {
-            margin-bottom:20px;
+            margin-bottom: 20px;
         }
     </style>
 }
 
-    <div id="app">
-        <div id="tree">
-            <div class="newOneLevelCategory">
-                <el-button type="primary"
-                           size="mini"
-                           @@click="handleAppend(0)">
-                    新增一级栏目
-                </el-button>
-            </div>
-            <el-tree :data="tree"
-                     node-key="id"
-                     default-expand-all
-                     :expand-on-click-node="false">
-                <div class="tree-node" slot-scope="{ node, data }">
-                    <div class="node-title">
-                        <el-tooltip class="item" effect="dark" :content="data.description||node.label" placement="bottom">
-                            <el-button type="text">{{ node.label }}</el-button>
-                        </el-tooltip>
-                    </div>
-                    <div class="node-operation">
-                        <el-button type="text"
-                                   size="mini"
-                                   @@click="handleUpdate(data.id)">
-                            编辑栏目
-                        </el-button>
-                        <el-button type="text"
-                                   size="mini"
-                                   @@click="handleAppend(data.id)">
-                            添加子栏目
-                        </el-button>
-                        <el-button type="text"
-                                   size="mini"
-                                   @@click="handleRemove(data.id)">
-                            删除栏目
-                        </el-button>
-                    </div>
+<div id="app">
+    <div id="tree">
+        <div class="newOneLevelCategory">
+            <el-button type="primary"
+                       size="mini"
+                       @@click="handleAppend(0)">
+                添加一级栏目
+            </el-button>
+        </div>
+        <el-tree :data="tree"
+                 node-key="id"
+                 default-expand-all
+                 :expand-on-click-node="false">
+            <div class="tree-node" slot-scope="{ node, data }">
+                <div class="node-title">
+                    <el-tooltip class="item" effect="dark" :content="data.description||node.label" placement="bottom">
+                        <el-button type="text">{{ node.label }}</el-button>
+                    </el-tooltip>
                 </div>
-            </el-tree>
-        </div>
-        <div id="createCategoryModal">
-            <el-dialog title="添加栏目"
-                       :visible.sync="createDialogVisible"
-                       width="30%">
-
-                <el-form :model="createCategoryForm" :rules="categoryFormRules" ref="createCategoryForm" label-position="right" label-width="80px">
-
-                    <el-form-item label="栏目名称" prop="name">
-                        <el-input type="text" v-model="createCategoryForm.name" placeholder="请输入栏目名称" clearable></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="栏目描述" prop="password">
-                        <el-input type="text" v-model="createCategoryForm.description" placeholder="请输入描述" clearable></el-input>
-                    </el-form-item>
-
-                </el-form>
-
-                <span slot="footer" class="dialog-footer">
-                    <el-button @@click="createDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @@click="createCategory(createCategoryForm)">确 定</el-button>
-                </span>
-            </el-dialog>
-        </div>
-        <div id="updateCategoryModal">
-            <el-dialog title="编辑栏目"
-                       :visible.sync="updateDialogVisible"
-                       width="30%">
-
-                <el-form :model="updateCategoryForm" :rules="categoryFormRules" ref="updateCategoryForm" label-position="right" label-width="80px">
-
-                    <el-form-item label="栏目名称" prop="name">
-                        <el-input type="text" v-model="updateCategoryForm.name" placeholder="请输入栏目名称" clearable></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="栏目描述" prop="password">
-                        <el-input type="text" v-model="updateCategoryForm.description" placeholder="请输入描述" clearable></el-input>
-                    </el-form-item>
-
-                </el-form>
-
-                <span slot="footer" class="dialog-footer">
-                    <el-button @@click="updateDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @@click="updateCategory(updateCategoryForm)">确 定</el-button>
-                </span>
-            </el-dialog>
-        </div>
+                <div class="node-operation">
+                    <el-button type="text"
+                               size="mini"
+                               @@click="handleUpdate(data.id)">
+                        编辑栏目
+                    </el-button>
+                    <el-button type="text"
+                               size="mini"
+                               @@click="handleAppend(data.id)">
+                        添加子栏目
+                    </el-button>
+                    <el-button type="text"
+                               size="mini"
+                               @@click="handleRemove(data.id)">
+                        删除栏目
+                    </el-button>
+                </div>
+            </div>
+        </el-tree>
     </div>
+    <div id="createCategoryModal">
+        <el-dialog title="添加栏目"
+                   :visible.sync="createDialogVisible"
+                   width="30%">
+
+            <el-form :model="createCategoryForm" :rules="categoryFormRules" ref="createCategoryForm" label-position="right" label-width="80px">
+
+                <el-form-item label="栏目名称" prop="name">
+                    <el-input type="text" v-model="createCategoryForm.name" placeholder="请输入栏目名称" clearable></el-input>
+                </el-form-item>
+
+                <el-form-item label="栏目描述" prop="password">
+                    <el-input type="text" v-model="createCategoryForm.description" placeholder="请输入描述" clearable></el-input>
+                </el-form-item>
+
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @@click="createDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @@click="createCategory(createCategoryForm)">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+    <div id="updateCategoryModal">
+        <el-dialog title="编辑栏目"
+                   :visible.sync="updateDialogVisible"
+                   width="30%">
+
+            <el-form :model="updateCategoryForm" :rules="categoryFormRules" ref="updateCategoryForm" label-position="right" label-width="80px">
+
+                <el-form-item label="栏目名称" prop="name">
+                    <el-input type="text" v-model="updateCategoryForm.name" placeholder="请输入栏目名称" clearable></el-input>
+                </el-form-item>
+
+                <el-form-item label="栏目描述" prop="password">
+                    <el-input type="text" v-model="updateCategoryForm.description" placeholder="请输入描述" clearable></el-input>
+                </el-form-item>
+
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @@click="updateDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @@click="updateCategory(updateCategoryForm)">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</div>
 
 @section Scripts{
     <script>
@@ -125,7 +126,6 @@
                 };
 
                 return {
-                    categories:[],
                     tree: [],
                     createDialogVisible: false,
                     updateDialogVisible: false,
@@ -151,7 +151,7 @@
                 }
             },
             methods: {
-                handleUpdate: function (id) { 
+                handleUpdate: function (id) {
                     var me = this;
                     me.getCategory(id);
                     me.updateDialogVisible = true;
@@ -182,8 +182,6 @@
 
                                 var data = body.data;
 
-                                me.categories = data;
-
                                 var tree = cms.util.dataConvert.toTree(data, (item) => {
                                     item.label = item.name;
                                 });
@@ -196,11 +194,11 @@
                                     me.tree.push(item);
                                 }
                             } else {
-                                alert('加载出错' + body.error_message);
+                                alert(err.body.error_message);
                             }
                         })
                         .catch((err) => {
-                            alert('加载出错' + err.body.error_message);
+                            alert(err.body.error_message);
                         });
                 },
                 createCategory: function (data) {
@@ -267,7 +265,7 @@
                 },
                 deleteCategory: function (id) {
                     var me = this;
-                    Vue.http.post(cms.urls.category.delete, { id: id})
+                    Vue.http.post(cms.urls.category.delete, { id: id })
                         .then((res) => {
                             var body = res.body;
                             if (body.success) {
@@ -292,7 +290,7 @@
                 },
                 getCategory: function (id) {
                     var me = this;
-                    Vue.http.get(cms.urls.category.get, { params: { id: id}})
+                    Vue.http.get(cms.urls.category.get, { params: { id: id } })
                         .then((res) => {
                             var body = res.body;
                             if (body.success) {
