@@ -11,6 +11,8 @@
 
         .node-operation {
             padding-left: 200px;
+            display:flex;
+            align-items:center;
         }
 
         .newOneLevelCategory {
@@ -24,7 +26,8 @@
         <div class="newOneLevelCategory">
             <el-button type="primary"
                        size="mini"
-                       @@click="handleAppend(0)">
+                       @@click="handleAppend(0)"
+                       icon="el-icon-plus">
                 添加一级栏目
             </el-button>
         </div>
@@ -41,17 +44,20 @@
                 <div class="node-operation">
                     <el-button type="text"
                                size="mini"
-                               @@click="handleUpdate(data.id)">
+                               @@click="handleUpdate(data.id)"
+                               icon="el-icon-edit">
                         编辑栏目
                     </el-button>
                     <el-button type="text"
                                size="mini"
-                               @@click="handleAppend(data.id)">
+                               @@click="handleAppend(data.id)"
+                               icon="el-icon-plus">
                         添加子栏目
                     </el-button>
                     <el-button type="text"
                                size="mini"
-                               @@click="handleRemove(data.id)">
+                               @@click="handleRemove(data.id)"
+                               icon="el-icon-delete">
                         删除栏目
                     </el-button>
                 </div>

@@ -37,13 +37,13 @@ namespace RennixCMS.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseResult<PostDto>> CreatePost(CreatePostDto dto)
+        public async Task<ResponseResult<PostDto>> Create(CreatePostDto dto)
         {
             return ResponseResult.Create(await _postAppService.CreatePostAsync(dto));
         }
 
         [HttpPost]
-        public async Task<ResponseResult> DeletePost(int id)
+        public async Task<ResponseResult> Delete(int id)
         {
             await _postAppService.DeletePostAsync(id);
             return ResponseResult.CreateVoidResult();
@@ -56,13 +56,13 @@ namespace RennixCMS.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseResult<PostDto>> GetPost(int id)
+        public async Task<ResponseResult<PostDto>> Get(int id)
         {
             return ResponseResult.Create(await _postAppService.GetPostAsync(id));
         }
 
         [HttpPost]
-        public async Task<ResponseResult> UpdatePostc(UpdatePostDto dto)
+        public async Task<ResponseResult> Update(UpdatePostDto dto)
         {
             await _postAppService.UpdatePostAsync(dto);
             return ResponseResult.CreateVoidResult();

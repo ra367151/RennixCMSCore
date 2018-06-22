@@ -1,6 +1,30 @@
-﻿<div id="app">
+﻿@section Styles{ 
+    <style>
+        .createPost{
+            margin-bottom:20px;
+        }
+        #app {
+            width:100%;
+        }
+        .operation {
+            display:flex;
+            flex-direction:row;
+        }
+    </style>
+}
+
+<div id="app">
     <div class="cms-filter">
 
+    </div>
+
+    <div class="createPost">
+        <el-button type="primary"
+                   size="mini"
+                   @@click="handleCreatePost"
+                   icon="el-icon-plus">
+            添加内容
+        </el-button>
     </div>
 
     <div class="cms-table">
@@ -8,47 +32,40 @@
             <el-table :data="tableData"
                       style="width: 100%;">
 
-                <el-table-column label="标题"
-                                 width="400">
+                <el-table-column label="标题">
                     <template slot-scope="scope">
                         <a @@click.pre="handleTitleClicked(scope.row.id)" href="#">{{scope.row.title}}</a>
                     </template>
                 </el-table-column>
                 <el-table-column prop="category.name"
-                                 label="分类"
-                                 width="180">
+                                 label="分类">
                 </el-table-column>
-                <el-table-column label="展示状态"
-                                 width="80">
+                <el-table-column label="展示">
                     <template slot-scope="scope">
-                        {{scope.row.isVisiable?'展示':'不展示'}}
+                        {{scope.row.isVisiable?'是':'否'}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="createTime"
-                                 label="创建时间"
-                                 width="180">
-                </el-table-column>
-                <el-table-column prop="lastModifyTime"
-                                 label="最后修改时间"
-                                 width="180">
+                                 label="创建时间">
                 </el-table-column>
                 <el-table-column prop="author"
-                                 label="作者"
-                                 width="180">
+                                 label="作者">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
 
-                        <el-button v-if="scope.row.isVisiable" size="mini"
-                                   @@click="handleVisiable(scope.row.id,false)">取消展示</el-button>
-                        <el-button v-else size="mini"
-                                   @@click="handleVisiable(scope.row.id,true)">设为展示</el-button>
+                        <div class="operation">
+                            <el-button v-if="scope.row.isVisiable" size="mini"
+                                       @@click="handleVisiable(scope.row.id,false)" type="primary">不展示</el-button>
+                            <el-button v-else size="mini"
+                                       @@click="handleVisiable(scope.row.id,true)" type="primary">展示</el-button>
 
-                        <el-button size="mini"
-                                   @@click="handleEdit(scope.row.id)">编辑</el-button>
-                        <el-button size="mini"
-                                   type="danger"
-                                   @@click="handleDelete(scope.row.id)">删除</el-button>
+                            <el-button size="mini"
+                                       @@click="handleEdit(scope.row.id)" type="primary"><i class="el-icon-edit"></i></el-button>
+                            <el-button size="mini"
+                                       type="danger"
+                                       @@click="handleDelete(scope.row.id)"><i class="el-icon-delete"></i></el-button>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -89,6 +106,9 @@
                 }
             },
             methods: {
+                handleCreatePost: function () {
+                    location.href ='/admin' + cms.pages.backstage.post_create +'?m=1-1';
+                 },
                 loadTableData: function () {
                     var me = this;
                     Vue.http.get(cms.urls.post.list, me.filter)

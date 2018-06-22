@@ -7,7 +7,11 @@ cms.urls = {
     logout: '/api/account/logout',
 
     post: {
-        list:'/api/post/getList'
+        list: '/api/post/getList',
+        create: '/api/post/create',
+        update: '/api/post/update',
+        delete: '/api/post/delete',
+        get:'/api/post/get'
     },
     category: {
         get:'/api/category/get',
@@ -21,11 +25,14 @@ cms.urls = {
 cms.pages = {
     login: '/account/login',
     resetPassword: '/account/resetPassword',
+    post: {
+        detail:'/post/detail'
+    },
     backstage: {
         post_list: '/post/list',
         post_create: '/post/create',
         post_update: '/post/update',
-        post_waste: '/post/waste',
+        post_detail:'/post/detail',
         category_list: '/category/list',
     }
 };

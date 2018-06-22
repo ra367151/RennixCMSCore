@@ -1,8 +1,220 @@
 ﻿
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "添加内容";
     Layout = "~/Areas/Admin/Views/Shared/_Backstage.cshtml";
 }
 
-<h2>Create</h2>
+@section Styles{
+    <style>
+        .category {
+            padding-top: 8px;
+        }
+
+        .operation {
+            max-width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+    </style>
+}
+
+<div id="app">
+    <el-form :model="createPostForm" :rules="createPostFormRules" ref="createPostForm" label-position="right" label-width="80px">
+
+        <el-form-item label="栏目">
+            <div class="category">
+                <el-tree :data="tree"
+                         node-key="id"
+                         default-expand-all
+                         :expand-on-click-node="false"
+                         @@node-click="handleCategoryClick">
+                    <div class="tree-node" slot-scope="{ node, data }">
+                        <div class="node-title">
+                            <el-tooltip class="item" effect="dark" :content="data.description||node.label" placement="bottom">
+                                <el-button type="text">{{ node.label }}</el-button>
+                            </el-tooltip>
+                        </div>
+                    </div>
+                </el-tree>
+            </div>
+        </el-form-item>
+
+        <el-form-item>
+            <el-input type="text" :disabled="true" v-model="createPostForm.categoryName" placeholder="请选择栏目"></el-input>
+        </el-form-item>
+
+        <el-form-item label="标题" prop="title">
+            <el-input type="text" v-model="createPostForm.title" placeholder="请输入标题" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="作者" prop="author">
+            <el-input type="text" v-model="createPostForm.author" placeholder="请输入作者" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="正文" prop="content">
+            <el-input type="textarea" v-model="createPostForm.content" placeholder="请输入正文" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="原文地址" prop="link">
+            <el-input type="text" v-model="createPostForm.link" placeholder="请输入原文地址，如有" clearable></el-input>
+        </el-form-item>
+
+        <div class="operation">
+            <el-button type="primary"
+                       size="mini"
+                       icon="el-icon-view">
+                预览
+            </el-button>
+            <el-button type="primary"
+                       size="mini"
+                       @@click="savePost()"
+                       icon="el-icon-check">
+                保存
+            </el-button>
+            <el-button type="primary"
+                       size="mini"
+                       @@click="savePost(true)"
+                       icon="el-icon-success">
+                保存并发布
+            </el-button>
+        </div>
+    </el-form>
+
+</div>
+@section Scripts{
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                var linkValidator = (rule, value, callback) => {
+
+                    if (value == null || value === '')
+                        return callback();
+
+                    var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@@?^=%&:/~\+#]*[\w\-\@@?^=%&/~\+#])?/;
+                    if (!reg.test(value)) {
+                         callback(new Error('输入的网址格式不正确'));
+                    }
+                    callback();
+                };
+                return {
+                    tree: [],
+                    createPostForm: {
+                        categoryId: null,
+                        title: null,
+                        content: null,
+                        author: null,
+                        link: null,
+                        isVisiable: false,
+                        categoryName: null
+                    },
+                    createPostFormRules: {
+                        title: [
+                            { required: true, message: '请输入标题', trigger: 'blur' }
+                        ],
+                        content: [
+                            { required: true, message: '请输入正文', trigger: 'blur' }
+                        ],
+                        author: [
+                            { required: true, message: '请输入作者', trigger: 'blur' }
+                        ],
+                        link: [
+                            { validator: linkValidator, trigger: 'blur' }
+                        ]
+                    }
+                }
+            },
+            methods: {
+                savePost: function (isVisiable) {
+
+                    isVisiable = isVisiable || false;
+
+                    var me = this;
+
+                    var data = me.createPostForm;
+
+                    data.isVisiable = isVisiable;
+
+                    console.log(me.$refs['createPostForm']);
+
+                    me.$refs['createPostForm'].validate((valid) => {
+
+                        if (valid) {
+
+                            if (me.createPostForm.categoryName == null || me.createPostForm.categoryName === '') {
+                                me.$message({
+                                    message: '请选择栏目',
+                                    type: 'error'
+                                });
+                                console.log('未选择栏目');
+                                return false;
+                            }
+
+                            Vue.http.post(cms.urls.post.create, data)
+                                .then((res) => {
+                                    var body = res.body;
+                                    if (body.success) {
+                                        me.$message({
+                                            message: '保存成功',
+                                            type: 'success'
+                                        });
+                                        location.href = cms.pages.post.detail + '?id=' + body.data.id;
+                                    } else {
+                                        me.$message({
+                                            message: err.body.error_message,
+                                            type: 'error'
+                                        });
+                                    }
+                                })
+                                .catch((err) => {
+                                    me.$message({
+                                        message: err.body.error_message,
+                                        type: 'error'
+                                    });
+                                });
+                        } else { 
+                            console.log('验证失败');
+                        }
+                    });
+                },
+                handleCategoryClick: function (data) {
+                    this.createPostForm.categoryId = data.id;
+                    this.createPostForm.categoryName = data.name;
+                },
+                loadCategoryTree: function () {
+                    var me = this;
+                    Vue.http.get(cms.urls.category.list)
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+
+                                var data = body.data;
+
+                                var tree = cms.util.dataConvert.toTree(data, (item) => {
+                                    item.label = item.name;
+                                });
+
+                                for (var item of me.tree) {
+                                    delete item;
+                                }
+
+                                for (var item of tree) {
+                                    me.tree.push(item);
+                                }
+                            } else {
+                                alert(err.body.error_message);
+                            }
+                        })
+                        .catch((err) => {
+                            alert(err.body.error_message);
+                        });
+                },
+            },
+            mounted: function () {
+                this.loadCategoryTree();
+            }
+        })
+    </script>
+}
 
