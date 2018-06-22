@@ -109,7 +109,7 @@ cms.util.queryString = function() {
     };
 }();
 cms.util.dataConvert = {};
-cms.util.dataConvert.toTree = function (data) {
+cms.util.dataConvert.toTree = function (data,format) {
     // 删除 所有 children,以防止多次调用
     data.forEach(function (item) {
         delete item.children;
@@ -121,11 +121,11 @@ cms.util.dataConvert.toTree = function (data) {
         map[item.id] = item;
     });
 
-    console.log(map);
-
     var val = [];
     data.forEach(function (item) {
-
+        if (format != null) {
+            format(item);
+        }
         // 以当前遍历项，的parentId,去map对象中找到索引的id
         var parent = map[item.parentId];
 
@@ -139,6 +139,5 @@ cms.util.dataConvert.toTree = function (data) {
             val.push(item);
         }
     });
-    console.log(val);
     return val;
 }

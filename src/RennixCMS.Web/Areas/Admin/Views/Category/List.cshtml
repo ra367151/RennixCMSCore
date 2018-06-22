@@ -1,49 +1,129 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "栏目列表";
     Layout = "~/Areas/Admin/Views/Shared/_Backstage.cshtml";
 }
+@section Styles{
+    <style>
+        .tree-node {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .node-operation {
+            padding-left: 200px;
+        }
+    </style>
+}
 
 <div id="app">
-    <div>
+    <div id="tree">
         <el-tree :data="tree"
                  node-key="id"
                  default-expand-all
                  :expand-on-click-node="false">
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>{{ node.label }}</span>
-                <span>
+            <div class="tree-node" slot-scope="{ node, data }">
+                <div class="node-title">
+                    <el-tooltip class="item" effect="dark" :content="data.description" placement="bottom">
+                        <el-button type="text">{{ node.label }}</el-button>
+                    </el-tooltip>
+                </div>
+                <div class="node-operation">
                     <el-button type="text"
                                size="mini"
-                               @@click="handleAppend(node.id)">
+                               @@click="handleAppend(data.id)">
                         添加子栏目
                     </el-button>
                     <el-button type="text"
                                size="mini"
-                               @@click="handleRemove(node.id)">
+                               @@click="handleRemove(data.id)">
                         删除栏目
                     </el-button>
-                </span>
-            </span>
+                </div>
+            </div>
         </el-tree>
+    </div>
+    <div id="createCategoryModal">
+        <el-dialog title="添加栏目"
+                   :visible.sync="createDialogVisible"
+                   width="30%">
+
+            <el-form :model="createCategoryForm" :rules="createCategoryFormRules" ref="createCategoryForm" label-position="right" label-width="80px">
+
+                <el-form-item :required="true" label="栏目名称" prop="name">
+                    <el-input type="text" v-model="createCategoryForm.name" placeholder="请输入栏目名称" clearable></el-input>
+                </el-form-item>
+
+                <el-form-item :required="false" label="描述" prop="password">
+                    <el-input type="text" v-model="createCategoryForm.description" placeholder="请输入描述" clearable></el-input>
+                </el-form-item>
+
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @@click="location.reload()">取 消</el-button>
+                <el-button type="primary" @@click="createCategory(createCategoryForm)">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </div>
 
-@section Scripts{ 
+@section Scripts{
     <script>
         new Vue({
             el: '#app',
             data() {
+                var checkCategoryName = (rule, value, callback) => {
+                    if (value) {
+                        if (value.length <= 10) {
+                            callback();
+                        } else {
+                            callback(new Error('栏目名称长度不能大于10'));
+                        }
+                    } else if (value === 0 || value === '0') {
+                        callback();
+                    } else {
+                        callback(new Error('请输入栏目名称'));
+                    }
+                };
+
                 return {
                     tree: [],
-                } 
+                    createDialogVisible: false,
+                    updateDialogVisible: false,
+                    confirmDeleteDialogVisiable: false,
+
+                    createCategoryForm: {
+                        parentId: 0,
+                        name: '',
+                        description: ''
+                    },
+                    createCategoryFormRules: {
+                        name: [
+                            { validator: checkCategoryName, trigger: 'blur' }
+                        ],
+                        description: [
+
+                        ]
+                    }
+                }
             },
             methods: {
-                handleRemove: function (id) { 
+                handleRemove: function (id) {
+                    var me = this;
+                    me.$confirm('确定要删除这个栏目吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        me.deleteCategory(id);
+                    }).catch(() => {
 
+                    });
                 },
                 handleAppend: function (id) {
-
+                    var me = this;
+                    me.createCategoryForm.parentId = id;
+                    me.createDialogVisible = true;
                 },
                 loadCategoryTree: function () {
                     var me = this;
@@ -54,16 +134,16 @@
 
                                 var data = body.data;
 
-                                var tree = cms.util.dataConvert.toTree(data);
+                                var tree = cms.util.dataConvert.toTree(data, (item) => {
+                                    item.label = item.name;
+                                });
 
-                                for (var item of me.tree) { 
+                                for (var item of me.tree) {
                                     delete item;
                                 }
 
                                 for (var item of tree) {
-                                    var current = item;
-                                    current.label = item.name;
-                                    me.tree.push(current);
+                                    me.tree.push(item);
                                 }
                             } else {
                                 alert('加载出错' + body.error_message);
@@ -73,16 +153,66 @@
                             alert('加载出错' + err.body.error_message);
                         });
                 },
-                createCategory: function (data) { 
+                createCategory: function (data) {
+                    var me = this;
+                    me.$refs['createCategoryForm'].validate((valid) => {
+                        if (valid) {
+                            Vue.http.post(cms.urls.category.create, data)
+                                .then((res) => {
+                                    var body = res.body;
+                                    if (body.success) {
+                                        me.$message({
+                                            message: '添加成功',
+                                            type: 'success'
+                                        });
+                                        location.reload();
+                                    } else {
+                                        me.$message({
+                                            message: err.body.error_message,
+                                            type: 'error'
+                                        });
+                                        me.createDialogVisible = false;
+                                    }
+                                })
+                                .catch((err) => {
+                                    me.$message({
+                                        message: err.body.error_message,
+                                        type: 'error'
+                                    });
+                                    me.createDialogVisible = false;
+                                });
+                        }
+                    });
+                },
+                updateCategory: function (data) {
 
                 },
-                updateCategory: function (data) { 
-
+                deleteCategory: function (id) {
+                    var me = this;
+                    Vue.http.post(cms.urls.category.delete, { id: id})
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+                                me.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                });
+                                location.reload();
+                            } else {
+                                me.$message({
+                                    message: err.body.error_message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            me.$message({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
+                        });
                 },
-                deleteCategory: function (id) { 
-
-                },
-                getCategory: function (id) { 
+                getCategory: function (id) {
 
                 }
             },

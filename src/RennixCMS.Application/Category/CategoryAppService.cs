@@ -58,6 +58,9 @@ namespace RennixCMS.Application.Category
                     if (entity.Posts != null && entity.Posts.Any())
                         throw new InvalidOperationException($"{entity.Name}栏目下有内容，不允许删除");
 
+                    if(await repository.CountAsync(x=>x.ParentId==id)>0)
+                        throw new InvalidOperationException($"{entity.Name}栏目下有子栏目，不允许删除");
+
                     await repository.DeleteAsync(id);
 
                     await scope.SaveChangesAsync();
