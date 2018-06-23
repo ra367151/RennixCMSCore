@@ -136,8 +136,6 @@
 
                     data.isVisiable = isVisiable;
 
-                    console.log(me.$refs['createPostForm']);
-
                     me.$refs['createPostForm'].validate((valid) => {
 
                         if (valid) {
@@ -147,7 +145,6 @@
                                     message: '请选择栏目',
                                     type: 'error'
                                 });
-                                console.log('未选择栏目');
                                 return false;
                             }
 
@@ -159,7 +156,7 @@
                                             message: '保存成功',
                                             type: 'success'
                                         });
-                                        location.href = cms.pages.post.detail + '?id=' + body.data.id;
+                                        location.reload();
                                     } else {
                                         me.$message({
                                             message: err.body.error_message,
@@ -173,8 +170,6 @@
                                         type: 'error'
                                     });
                                 });
-                        } else { 
-                            console.log('验证失败');
                         }
                     });
                 },

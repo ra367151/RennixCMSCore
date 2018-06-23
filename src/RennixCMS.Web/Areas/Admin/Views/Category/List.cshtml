@@ -185,26 +185,25 @@
                         .then((res) => {
                             var body = res.body;
                             if (body.success) {
-
                                 var data = body.data;
 
                                 var tree = cms.util.dataConvert.toTree(data, (item) => {
                                     item.label = item.name;
                                 });
 
-                                for (var item of me.tree) {
-                                    delete item;
-                                }
-
-                                for (var item of tree) {
-                                    me.tree.push(item);
-                                }
+                                me.tree = tree;
                             } else {
-                                alert(err.body.error_message);
+                                me.$message({
+                                    message: res.body.error_message,
+                                    type:'error'
+                                });
                             }
                         })
                         .catch((err) => {
-                            alert(err.body.error_message);
+                            me.$message({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
                         });
                 },
                 createCategory: function (data) {
@@ -219,14 +218,14 @@
                                             message: '添加成功',
                                             type: 'success'
                                         });
-                                        location.reload();
+                                        me.loadCategoryTree();
                                     } else {
                                         me.$message({
                                             message: err.body.error_message,
                                             type: 'error'
                                         });
-                                        me.createDialogVisible = false;
                                     }
+                                    me.createDialogVisible = false;
                                 })
                                 .catch((err) => {
                                     me.$message({
@@ -250,14 +249,14 @@
                                             message: '保存成功',
                                             type: 'success'
                                         });
-                                        location.reload();
+                                        me.loadCategoryTree();
                                     } else {
                                         me.$message({
                                             message: err.body.error_message,
                                             type: 'error'
                                         });
-                                        me.updateDialogVisible = false;
                                     }
+                                    me.updateDialogVisible = false;
                                 })
                                 .catch((err) => {
                                     me.$message({
@@ -279,7 +278,7 @@
                                     message: '删除成功',
                                     type: 'success'
                                 });
-                                location.reload();
+                                me.loadCategoryTree();
                             } else {
                                 me.$message({
                                     message: err.body.error_message,

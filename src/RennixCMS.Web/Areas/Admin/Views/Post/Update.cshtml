@@ -1,8 +1,230 @@
 ﻿
 @{
-    ViewData["Title"] = "Update";
+    ViewData["Title"] = "编辑内容";
     Layout = "~/Areas/Admin/Views/Shared/_Backstage.cshtml";
 }
 
-<h2>Update</h2>
+@section Styles{
+    <style>
+        .category {
+            padding-top: 8px;
+        }
+
+        .operation {
+            max-width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+    </style>
+}
+
+<div id="app">
+    <el-form :model="updatePostForm" :rules="updatePostFormRules" ref="updatePostForm" label-position="right" label-width="80px">
+
+        <el-form-item label="栏目">
+            <div class="category">
+                <el-tree :data="tree"
+                         node-key="id"
+                         default-expand-all
+                         :expand-on-click-node="false"
+                         @@node-click="handleCategoryClick"
+                         ref="tree">
+                    <div class="tree-node" slot-scope="{ node, data }">
+                        <div class="node-title">
+                            <el-tooltip class="item" effect="dark" :content="data.description||node.label" placement="bottom">
+                                <el-button type="text">{{ node.label }}</el-button>
+                            </el-tooltip>
+                        </div>
+                    </div>
+                </el-tree>
+            </div>
+        </el-form-item>
+
+        <el-form-item>
+            <el-input type="text" :disabled="true" v-model="updatePostForm.categoryName" placeholder="请选择栏目"></el-input>
+        </el-form-item>
+
+        <el-form-item label="标题" prop="title">
+            <el-input type="text" v-model="updatePostForm.title" placeholder="请输入标题" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="作者" prop="author">
+            <el-input type="text" v-model="updatePostForm.author" placeholder="请输入作者" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="正文" prop="content">
+            <el-input type="textarea" v-model="updatePostForm.content" placeholder="请输入正文" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="原文地址" prop="link">
+            <el-input type="text" v-model="updatePostForm.link" placeholder="请输入原文地址，如有" clearable></el-input>
+        </el-form-item>
+
+        <div class="operation">
+            <el-button type="primary" updatePostForm
+                       size="mini"
+                       icon="el-icon-view">
+                预览
+            </el-button>
+            <el-button type="primary"
+                       size="mini"
+                       @@click="savePost"
+                       icon="el-icon-check">
+                保存修改
+            </el-button>
+        </div>
+    </el-form>
+
+</div>
+@section Scripts{
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                var linkValidator = (rule, value, callback) => {
+
+                    if (value == null || value === '')
+                        return callback();
+
+                    var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@@?^=%&:/~\+#]*[\w\-\@@?^=%&/~\+#])?/;
+                    if (!reg.test(value)) {
+                        callback(new Error('输入的网址格式不正确'));
+                    }
+                    callback();
+                };
+                return {
+                    tree: [],
+                    updatePostForm: {
+                        id: null,
+                        categoryId: null,
+                        title: null,
+                        content: null,
+                        author: null,
+                        link: null,
+                        isVisiable: false,
+                        categoryName: null
+                    },
+                    updatePostFormRules: {
+                        title: [
+                            { required: true, message: '请输入标题', trigger: 'blur' }
+                        ],
+                        content: [
+                            { required: true, message: '请输入正文', trigger: 'blur' }
+                        ],
+                        author: [
+                            { required: true, message: '请输入作者', trigger: 'blur' }
+                        ],
+                        link: [
+                            { validator: linkValidator, trigger: 'blur' }
+                        ]
+                    }
+                }
+            },
+            methods: {
+                savePost: function () {
+
+                    var me = this;
+
+                    var data = me.updatePostForm;
+
+                    me.$refs['updatePostForm'].validate((valid) => {
+
+                        if (valid) {
+
+                            if (me.updatePostForm.categoryName == null || me.updatePostForm.categoryName === '') {
+                                me.$message({
+                                    message: '请选择栏目',
+                                    type: 'error'
+                                });
+                                return false;
+                            }
+
+                            Vue.http.post(cms.urls.post.update, data)
+                                .then((res) => {
+                                    var body = res.body;
+                                    if (body.success) {
+                                        me.$message({
+                                            message: '保存成功',
+                                            type: 'success'
+                                        });
+                                    } else {
+                                        me.$message({
+                                            message: err.body.error_message,
+                                            type: 'error'
+                                        });
+                                    }
+                                })
+                                .catch((err) => {
+                                    me.$message({
+                                        message: err.body.error_message,
+                                        type: 'error'
+                                    });
+                                });
+                        }
+                    });
+                },
+                handleCategoryClick: function (data) {
+                    this.updatePostForm.categoryId = data.id;
+                    this.updatePostForm.categoryName = data.name;
+                },
+                loadCategoryTree: function () {
+                    var me = this;
+                    return Vue.http.get(cms.urls.category.list)
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+
+                                var data = body.data;
+
+                                var tree = cms.util.dataConvert.toTree(data, (item) => {
+                                    item.label = item.name;
+                                });
+
+                                me.tree = tree;
+                            } else {
+                                me.$messsage({
+                                    message: res.body.error_message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            me.$messsage({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
+                        });
+                },
+                loadPost: function () {
+                    var me = this;
+                    var id = cms.util.queryString.getByName('id');
+                    Vue.http.get(cms.urls.post.get, { params: { id: id } })
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+                                body.data.categoryName = me.$refs['tree'].getNode(body.data.categoryId).data.name
+                                me.updatePostForm = body.data;
+                            } else {
+                                me.$messsage({
+                                    message: res.body.error_message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            me.$messsage({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
+                        });
+                }
+            },
+            mounted: function () {
+                this.loadCategoryTree()
+                    .then(this.loadPost());
+            }
+        })
+    </script>
+}
 

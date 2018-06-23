@@ -1,14 +1,16 @@
-﻿@section Styles{ 
+﻿@section Styles{
     <style>
-        .createPost{
-            margin-bottom:20px;
+        .createPost {
+            margin-bottom: 20px;
         }
+
         #app {
-            width:100%;
+            width: 100%;
         }
+
         .operation {
-            display:flex;
-            flex-direction:row;
+            display: flex;
+            flex-direction: row;
         }
     </style>
 }
@@ -107,8 +109,33 @@
             },
             methods: {
                 handleCreatePost: function () {
-                    location.href ='/admin' + cms.pages.backstage.post_create +'?m=1-1';
-                 },
+                    location.href = '/admin' + cms.pages.backstage.post_create + '?m=1-1';
+                },
+                deletePost: function (id) {
+                    var me = this;
+                    Vue.http.post(cms.urls.post.delete, { id: id })
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+                                me.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                });
+                                me.loadTableData();
+                            } else {
+                                me.$message({
+                                    message: body.error_message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            me.$message({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
+                        });
+                },
                 loadTableData: function () {
                     var me = this;
                     Vue.http.get(cms.urls.post.list, me.filter)
@@ -118,11 +145,17 @@
                                 me.tableData = body.data.data;
                                 me.totalCount = body.data.totalCount;
                             } else {
-                                alert('加载出错' + body.error_message);
+                                me.$message({
+                                    message: body.error_message,
+                                    type: 'error'
+                                });
                             }
                         })
                         .catch((err) => {
-                            alert('加载出错' + err.body.error_message);
+                            me.$message({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
                         });
                 },
                 handlePageSizeChanged: function (pageSize) {
@@ -133,14 +166,45 @@
                     this.filter.pageIndex = pageIndex;
                     this.loadTableData();
                 },
-                handleEdit: function (id) { 
-
+                handleEdit: function (id) {
+                    location.href = '/admin' + cms.pages.backstage.post_update + '?m=1-1&id=' + id;
                 },
-                handleDelete: function () { 
+                handleDelete: function (id) {
+                    var me = this;
+                    me.$confirm('确定要删除这个内容吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        me.deletePost(id);
+                    }).catch(() => {
 
+                    });
                 },
-                handleVisiable: function (id, changeVisiableTo) { 
-                    
+                handleVisiable: function (id, changeVisiableTo) {
+                    var me = this;
+                    Vue.http.post(cms.urls.post.changeState, { id: id, isVisiable: changeVisiableTo })
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+                                me.$message({
+                                    message: '操作成功',
+                                    type: 'success'
+                                });
+                                me.loadTableData();
+                            } else {
+                                me.$message({
+                                    message: body.error_message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            me.$message({
+                                message: err.body.error_message,
+                                type: 'error'
+                            });
+                        });
                 },
                 handleTitleClicked: function (id) {
                     // 跳转到前台展示页面

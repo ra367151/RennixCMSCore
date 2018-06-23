@@ -11,7 +11,8 @@ cms.urls = {
         create: '/api/post/create',
         update: '/api/post/update',
         delete: '/api/post/delete',
-        get:'/api/post/get'
+        get: '/api/post/get',
+        changeState:'/api/Post/ChangeVisiableState'
     },
     category: {
         get:'/api/category/get',
