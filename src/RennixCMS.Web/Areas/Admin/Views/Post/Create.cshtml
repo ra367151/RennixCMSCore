@@ -5,6 +5,7 @@
 }
 
 @section Styles{
+    <link href="/lib/editor.md/editormd.css" rel="stylesheet" />
     <style>
         .category {
             padding-top: 8px;
@@ -15,6 +16,9 @@
             display: flex;
             flex-direction: row;
             justify-content: center;
+        }
+
+        #editormd {
         }
     </style>
 }
@@ -52,8 +56,10 @@
             <el-input type="text" v-model="createPostForm.author" placeholder="请输入作者" clearable></el-input>
         </el-form-item>
 
-        <el-form-item label="正文" prop="content">
-            <el-input type="textarea" v-model="createPostForm.content" placeholder="请输入正文" clearable></el-input>
+        <el-form-item label="正文">
+            <div id="editormd" class="editormd editormd-vertical">
+                <textarea></textarea>
+            </div>
         </el-form-item>
 
         <el-form-item label="原文地址" prop="link">
@@ -61,11 +67,6 @@
         </el-form-item>
 
         <div class="operation">
-            <el-button type="primary"
-                       size="mini"
-                       icon="el-icon-view">
-                预览
-            </el-button>
             <el-button type="primary"
                        size="mini"
                        @@click="savePost()"
@@ -80,9 +81,12 @@
             </el-button>
         </div>
     </el-form>
-
 </div>
+
 @section Scripts{
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/editor.md/editormd.js"></script>
+    <script src="/lib/editor.md/setting.js"></script>
     <script>
         new Vue({
             el: '#app',
@@ -94,7 +98,7 @@
 
                     var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@@?^=%&:/~\+#]*[\w\-\@@?^=%&/~\+#])?/;
                     if (!reg.test(value)) {
-                         callback(new Error('输入的网址格式不正确'));
+                        callback(new Error('输入的网址格式不正确'));
                     }
                     callback();
                 };
@@ -113,9 +117,6 @@
                         title: [
                             { required: true, message: '请输入标题', trigger: 'blur' }
                         ],
-                        content: [
-                            { required: true, message: '请输入正文', trigger: 'blur' }
-                        ],
                         author: [
                             { required: true, message: '请输入作者', trigger: 'blur' }
                         ],
@@ -132,6 +133,8 @@
 
                     var me = this;
 
+                    me.createPostForm.content = window.content;
+
                     var data = me.createPostForm;
 
                     data.isVisiable = isVisiable;
@@ -139,6 +142,14 @@
                     me.$refs['createPostForm'].validate((valid) => {
 
                         if (valid) {
+                            
+                            if (me.createPostForm.content == null || me.createPostForm.content === '') {
+                                me.$message({
+                                    message: '请输入正文',
+                                    type: 'error'
+                                });
+                                return false;
+                            }
 
                             if (me.createPostForm.categoryName == null || me.createPostForm.categoryName === '') {
                                 me.$message({

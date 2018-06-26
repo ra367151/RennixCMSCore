@@ -5,6 +5,7 @@
 }
 
 @section Styles{
+    <link href="/lib/editor.md/editormd.css" rel="stylesheet" />
     <style>
         .category {
             padding-top: 8px;
@@ -53,8 +54,10 @@
             <el-input type="text" v-model="updatePostForm.author" placeholder="请输入作者" clearable></el-input>
         </el-form-item>
 
-        <el-form-item label="正文" prop="content">
-            <el-input type="textarea" v-model="updatePostForm.content" placeholder="请输入正文" clearable></el-input>
+        <el-form-item label="正文">
+            <div id="editormd" class="editormd editormd-vertical">
+                <textarea id="content"></textarea>
+            </div>
         </el-form-item>
 
         <el-form-item label="原文地址" prop="link">
@@ -62,11 +65,6 @@
         </el-form-item>
 
         <div class="operation">
-            <el-button type="primary" updatePostForm
-                       size="mini"
-                       icon="el-icon-view">
-                预览
-            </el-button>
             <el-button type="primary"
                        size="mini"
                        @@click="savePost"
@@ -78,7 +76,15 @@
 
 </div>
 @section Scripts{
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/editor.md/editormd.js"></script>
+    <script src="/lib/editor.md/setting.js"></script>
     <script>
+        var setMarkDownContent = function (content) {
+            $('#content').html(content);
+            window.content = content;
+        }
+
         new Vue({
             el: '#app',
             data() {
@@ -109,9 +115,6 @@
                         title: [
                             { required: true, message: '请输入标题', trigger: 'blur' }
                         ],
-                        content: [
-                            { required: true, message: '请输入正文', trigger: 'blur' }
-                        ],
                         author: [
                             { required: true, message: '请输入作者', trigger: 'blur' }
                         ],
@@ -126,6 +129,8 @@
 
                     var me = this;
 
+                    me.updatePostForm.content = window.content;
+
                     var data = me.updatePostForm;
 
                     me.$refs['updatePostForm'].validate((valid) => {
@@ -135,6 +140,14 @@
                             if (me.updatePostForm.categoryName == null || me.updatePostForm.categoryName === '') {
                                 me.$message({
                                     message: '请选择栏目',
+                                    type: 'error'
+                                });
+                                return false;
+                            }
+
+                            if (me.updatePostForm.content == null || me.updatePostForm.content === '') {
+                                me.$message({
+                                    message: '请输入正文',
                                     type: 'error'
                                 });
                                 return false;
@@ -205,6 +218,7 @@
                             if (body.success) {
                                 body.data.categoryName = me.$refs['tree'].getNode(body.data.categoryId).data.name
                                 me.updatePostForm = body.data;
+                                setMarkDownContent(me.updatePostForm.content);
                             } else {
                                 me.$messsage({
                                     message: res.body.error_message,
