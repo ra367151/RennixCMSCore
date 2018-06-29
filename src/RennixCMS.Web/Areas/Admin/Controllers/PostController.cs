@@ -31,9 +31,9 @@ namespace RennixCMS.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Waste()
+        public IActionResult Detail()
         {
-            return View(nameof(List));
+            return View();
         }
     }
 }

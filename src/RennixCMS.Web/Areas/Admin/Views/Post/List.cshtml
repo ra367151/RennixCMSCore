@@ -34,7 +34,8 @@
             <el-table :data="tableData"
                       style="width: 100%;">
 
-                <el-table-column label="标题">
+                <el-table-column label="标题"
+                                 :width="260">
                     <template slot-scope="scope">
                         <a @@click.pre="handleTitleClicked(scope.row.id)" href="#">{{scope.row.title}}</a>
                     </template>
@@ -42,26 +43,31 @@
                 <el-table-column prop="category.name"
                                  label="分类">
                 </el-table-column>
-                <el-table-column label="展示">
-                    <template slot-scope="scope">
-                        {{scope.row.isVisiable?'是':'否'}}
-                    </template>
-                </el-table-column>
                 <el-table-column prop="createTime"
                                  label="创建时间">
                 </el-table-column>
                 <el-table-column prop="author"
                                  label="作者">
                 </el-table-column>
+                <el-table-column label="展示">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.isVisiable"
+                                   active-color="#13ce66"
+                                   inactive-color="#ff4949"
+                                   @@change="handleVisiable(scope.row.id,scope.row.isVisiable)">
+                        </el-switch>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
 
                         <div class="operation">
-                            <el-button v-if="scope.row.isVisiable" size="mini"
-                                       @@click="handleVisiable(scope.row.id,false)" type="primary">不展示</el-button>
-                            <el-button v-else size="mini"
-                                       @@click="handleVisiable(scope.row.id,true)" type="primary">展示</el-button>
 
+                            <el-button size="mini"
+                                       @@click="handleView(scope.row.id)"
+                                       type="primary">
+                                <i class="el-icon-view"></i>
+                            </el-button>
                             <el-button size="mini"
                                        @@click="handleEdit(scope.row.id)" type="primary"><i class="el-icon-edit"></i></el-button>
                             <el-button size="mini"
@@ -110,6 +116,9 @@
             methods: {
                 handleCreatePost: function () {
                     location.href = '/admin' + cms.pages.backstage.post_create + '?m=1-1';
+                },
+                handleView: function (id) {
+                    location.href = '/admin' + cms.pages.backstage.post_detail + '?m=1-1&id=' + id;
                 },
                 deletePost: function (id) {
                     var me = this;

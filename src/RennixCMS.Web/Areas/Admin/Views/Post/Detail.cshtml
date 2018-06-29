@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "内容详情";
+    Layout = "~/Areas/Admin/Views/Shared/_Backstage.cshtml";
+}
+
+@section Styles{
+    <link href="/lib/editor.md/editormd.css" rel="stylesheet" />
+    <style>
+        .category {
+            padding-top: 8px;
+        }
+
+        .operation {
+            max-width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .markdown-body {
+            width:100%;
+            height:100vh;
+        }
+
+        .backToList {
+            margin-bottom:20px;
+        }
+      
+    </style>
+}
+
+    <div id="app">
+        <div class="backToList">
+            <el-button type="primary"
+                       size="mini"
+                       @@click="handleBackToList"
+                       icon="el-icon-back">
+                返回列表
+            </el-button>
+        </div>
+
+        <h3>{{post.title}}</h3>
+        <br />
+        <p>{{post.category.name}} | {{post.author}} 创作于 {{post.createTime}}</p>
+        <br />
+        <div v-html="post.contentHTML" class="markdown-body editormd-preview-container">
+
+        </div>
+    </div>
+@section Scripts{
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script>
+        var showContent = function (content) {
+            $('.markdown-body').html(content);
+        }
+
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    post:{
+                        contentHTML: null,
+                        title: null,
+                        categoryName: null,
+                        author: null,
+                        createTime: null
+                    }
+                }
+            },
+            methods: {
+                handleBackToList: function () {
+                    location.href = '/admin'+ cms.pages.backstage.post_list + '?m=1-1';
+                 },
+                loadPost: function () {
+                    var me = this;
+                    var id = cms.util.queryString.getByName('id');
+                    Vue.http.get(cms.urls.post.get, { params: { id: id } })
+                        .then((res) => {
+                            var body = res.body;
+                            if (body.success) {
+                                me.post = body.data;
+                            } else {
+                                me.$messsage({
+                                    message: res.body.error_message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            me.$messsage({
+                                message: err,
+                                type: 'error'
+                            });
+                        });
+                }
+            },
+            mounted: function () {
+                this.loadPost();
+            }
+        })
+    </script>
+}
+

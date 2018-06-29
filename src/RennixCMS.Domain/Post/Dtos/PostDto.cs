@@ -14,7 +14,8 @@ namespace RennixCMS.Domain.Post.Dtos
 		public int CategoryId { get; set; }
 		public string Title { get; set; }
 		public string Content { get; set; }
-		public string Author { get; set; }
+        public string ContentHTML { get; set; }
+        public string Author { get; set; }
 		public string Link { get; set; }
 		public DateTime CreateTime { get; set; }
 		public int CreateUserId { get; set; }

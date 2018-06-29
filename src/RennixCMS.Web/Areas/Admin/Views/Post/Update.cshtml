@@ -109,7 +109,8 @@
                         author: null,
                         link: null,
                         isVisiable: false,
-                        categoryName: null
+                        categoryName: null,
+                        contentHTML: null
                     },
                     updatePostFormRules: {
                         title: [
@@ -130,6 +131,7 @@
                     var me = this;
 
                     me.updatePostForm.content = window.content;
+                    me.updatePostForm.contentHTML = window.editor.getHTML();
 
                     var data = me.updatePostForm;
 

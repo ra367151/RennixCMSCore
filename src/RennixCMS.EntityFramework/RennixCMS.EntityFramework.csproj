@@ -19,6 +19,8 @@
     <Compile Include="Migrations\20180526102523_add_category_table.Designer.cs" />
     <Compile Include="Migrations\20180527115335_changepostid_type.cs" />
     <Compile Include="Migrations\20180527115335_changepostid_type.Designer.cs" />
+    <Compile Include="Migrations\20180629130026_add_contenthtml_to_post.cs" />
+    <Compile Include="Migrations\20180629130026_add_contenthtml_to_post.Designer.cs" />
     <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
   </ItemGroup>
 
