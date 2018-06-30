@@ -24,6 +24,7 @@ namespace RennixCMS.Infrastructure.Mvc
             // 如果需要做页面静态化的视图查找 可以在这里进行扩展
             if (context.Values.ContainsKey("theme"))
             {
+                // todo:先判断静态页面是否存在 如果不存在 则返回动态结果
                 if (EnableStaticPages != null && EnableStaticPages.Value)
                 {
                     viewLocationResult = viewLocations.Select(f => f.Replace("/Views/", "/Statics/").Replace(".cshtml",".html"));
