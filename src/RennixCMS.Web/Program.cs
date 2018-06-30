@@ -7,6 +7,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RennixCMS.Application.Setting;
+using RennixCMS.Infrastructure.Global;
+using RennixCMS.Infrastructure.Mvc;
 
 namespace RennixCMS.Web
 {
@@ -14,12 +17,19 @@ namespace RennixCMS.Web
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = BuildWebHost(args);
+
+            host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            var host = WebHost.CreateDefaultBuilder(args)
+                       .UseStartup<Startup>()
+                       .Build();
+
+            return host;
+        }
     }
 }

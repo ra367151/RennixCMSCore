@@ -3,6 +3,7 @@ using System;
 using RennixCMS.Domain.Post.Dtos;
 using RennixCMS.Domain.Post.Models;
 using RennixCMS.Domain.Category.Dtos;
+using RennixCMS.Domain.Setting.Dtos;
 
 namespace RennixCMS.Application
 {
@@ -16,6 +17,9 @@ namespace RennixCMS.Application
 			CreateMap<CategoryDto, Domain.Category.Models.Category>().ReverseMap();
             CreateMap<CreateCategoryDto, Domain.Category.Models.Category>().ReverseMap();
             CreateMap<UpdateCategoryDto, Domain.Category.Models.Category>().ReverseMap();
+
+            CreateMap<UpdateSettingDto, Domain.Setting.Models.Setting>().ReverseMap();
+            CreateMap<SettingDto, Domain.Setting.Models.Setting>().ReverseMap();
 
             CreateMap<Domain.Comment.Dtos.CommentDto, Domain.Comment.Models.Comment>().ReverseMap();
 		}
