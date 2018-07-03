@@ -49,12 +49,6 @@
     <Content Update="Areas\Admin\Views\Post\Detail.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Themes\Default\Home\About.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Themes\Default\Home\Contact.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Themes\Default\Home\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -64,7 +58,7 @@
     <Content Update="Themes\Default\Shared\Error.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Themes\Default\Shared\_ElementSite.cshtml">
+    <Content Update="Themes\Default\Shared\_BootstrapLayout.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Themes\Default\Shared\_Layout.cshtml">
