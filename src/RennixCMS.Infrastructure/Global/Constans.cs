@@ -6,12 +6,24 @@ namespace RennixCMS.Infrastructure.Global
 {
     public class Constans
     {
-        public class Setting
+        public class SettingKeys
         {
-            public class Keys
+            public class Site
             {
-               public const string Theme = "system.themes.current";
-                public const string EnableStaticPages = "system.pages.enableStaticPages";
+                public const string SiteName = "system.site.siteName";
+            }
+            public class Theme
+            {
+                public const string CurrentTheme = "system.theme.currentTheme";
+            }
+            public class StaticPage
+            {
+                public const string EnableStaticPages = "system.staticPage.enableStaticPages";
+            }
+
+            public class Menu
+            {
+                public const string FrontEndMenus = "system.menu.frontendMenus";
             }
         }
 

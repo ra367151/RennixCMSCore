@@ -12,6 +12,7 @@
     <Folder Include="Identity\UserClaim\Dtos\" />
     <Folder Include="Identity\Role\Dtos\" />
     <Folder Include="Identity\UserLogin\Dtos\" />
+    <Folder Include="Menu\Models\" />
   </ItemGroup>
 
   <ItemGroup>

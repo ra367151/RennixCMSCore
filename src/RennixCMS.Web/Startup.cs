@@ -171,7 +171,7 @@ namespace RennixCMS.Web
 
             if (ThemViewLocationExpander.CurrentTheme == null)
             {
-                var theme = settingService.GetSetting(Constans.Setting.Keys.Theme);
+                var theme = settingService.GetSetting(Constans.SettingKeys.Theme.CurrentTheme);
 
                 if (theme == null)
                 {
@@ -189,7 +189,7 @@ namespace RennixCMS.Web
             if (ThemViewLocationExpander.EnableStaticPages == null)
             {
                 var enableStaticPages = false;
-                var staticPageSetting = settingService.GetSetting(Constans.Setting.Keys.EnableStaticPages);
+                var staticPageSetting = settingService.GetSetting(Constans.SettingKeys.StaticPage.EnableStaticPages);
                 if (staticPageSetting != null && bool.TryParse(staticPageSetting.Value, out enableStaticPages))
                 {
                     ThemViewLocationExpander.EnableStaticPages = enableStaticPages;

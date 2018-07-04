@@ -1,33 +1,24 @@
 ﻿@{
     Layout = "_BootstrapLayout";
 }
+
 @section Styles
-{
+    {
     <style>
         .preview {
-            font-size:16px;
-            line-height:24px;
+            font-size: 16px;
+            line-height: 24px;
         }
+
         .page-navigation {
-            text-align:center;
+            text-align: center;
         }
     </style>
 }
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h2>用自动化替代重复</h2>
-        <p>2018-06-12  Software Project  约 3873 字  预计阅读 8 分钟</p>
-        <hr />
-        <p class="preview">
-            相信大家都有去图文制作、照相馆这些地方拍证件照的经历。在这些专业的场所，他们从采集照片，到出照片不到10分钟。其间，有多名工作人员参与其中：相信大家都有去图文制作、照相馆这些地方拍证件照的经历。在这些专业的场所，他们从采集照片，到出照片不到10分钟。其间，有多名工作人员参与其中：相信大家都有去图文制作、照相馆这些地方拍证件照的经历。在这些专业的场所，他们从采集照片，到出照片不到10分钟。其间，有多名工作人员参与其中：相信大家都有去图文制作、照相馆这些地方拍证件照的经历。在这些专业的场所，他们从采集照片，到出照片不到10分钟。其间，有多名工作人员参与其中：
-        </p>
-        <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-default pull-right">阅读全文</button>
-        </div>
+    <div id="postWrapper">
+       
     </div>
-</div>
-
 
 
 
@@ -50,3 +41,54 @@
         </li>
     </ul>
 </nav>
+@section Scripts{ 
+    <script>
+
+        var template = ` 
+            <div class="panel panel-default">
+                <div class="panel-body">
+                <h3>{{title}}</h3>
+                <p>{{time}}  {{category}}  约 {{length}} 字  预计阅读 {{readMiniutes}} 分钟</p>
+                <hr />
+                <p class="preview">
+                    {{description}}
+                </p>
+                <div class="btn-group" role="group">
+                    <button type="button" data-id="{{id}}" class="btn btn-default pull-right btn-detail">阅读全文</button>
+                </div> 
+                </div>
+             </div>`;
+
+        $(function () {
+
+            var redrectToDetail = function (id) {
+                location.href = pages.post.detail + '?id=' + id;
+            };
+
+            $(document).on('click','.btn-detail', function () {
+                var id = $(this).data('id');
+                redrectToDetail(id);
+            });
+
+            var container = $('#postWrapper');
+
+            var load = function () { 
+                $.get(apis.post.getList, function (res) {
+                    if (res.success) {
+                        var data = res.data.data;
+                        for (var item of data) {
+                            var dom = template.replace('{{id}}', item.id)
+                                .replace('{{title}}', item.title)
+                                .replace('{{readMiniutes}}', item.readMiniutes)
+                                .replace('{{length}}', item.length)
+                                .replace('{{description}}', item.description)
+                                .replace('{{time}}', item.createTime)
+                                .replace('{{category}}', item.category.name);
+                            container.append($(dom));
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+}

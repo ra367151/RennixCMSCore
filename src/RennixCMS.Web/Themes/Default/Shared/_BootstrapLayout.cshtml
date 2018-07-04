@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using RennixCMS.Application.Global
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -7,33 +9,31 @@
     <!-- Bootstrap -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body > .container {
-            padding:60px 15px 10px 15px;
-        }
         .footer-container {
-            text-align:center;
+            text-align: center;
         }
     </style>
     @RenderSection("Styles", required: false)
-    <title>@ViewBag.Title</title>
+    <title>@SystemRuntimeInfo.Instance.SiteName-@ViewBag.Title</title>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse ">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">@SystemRuntimeInfo.Instance.SiteName</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Project name</a>
+                <a class="navbar-brand" href="#">@SystemRuntimeInfo.Instance.SiteName</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    @foreach (var menu in SystemRuntimeInfo.Instance.Menus.OrderBy(x=>x.Sort))
+                    {
+                        <li><a href="@menu.Path">@menu.Name</a></li>
+                    }
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group">
@@ -57,7 +57,7 @@
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<script src="/js/config.js"></script>
 <script>
 
     // 菜单高亮
@@ -66,5 +66,5 @@
         $(this).addClass('active');
     })
 </script>
-
+<script src="/js/config.js"></script>
 @RenderSection("Scripts", required: false)
